@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PorositeDitore</title>
+<style>
+:root{--bg:#f4f6f8;--card:#fff;--text:#17202a;--muted:#667085;--line:#e4e7ec;--primary:#2563eb;--danger:#dc2626;--success:#16a34a;--warning:#d97706}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+header{background:#17202a;color:#fff;position:sticky;top:0;z-index:10;box-shadow:0 2px 10px #0002}
+.head{max-width:1100px;margin:auto;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+h1{margin:0;font-size:22px}.sub{font-size:12px;color:#cbd5e1;margin-top:4px}
+main{max-width:1100px;margin:auto;padding:20px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 2px 8px #00000008}
+.stat b{font-size:28px;display:block;margin-top:5px}.muted{color:var(--muted);font-size:13px}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.nav button{background:#fff;color:var(--text);border:1px solid var(--line)}
+button{border:0;border-radius:9px;padding:10px 14px;cursor:pointer;font-weight:700}.primary{background:var(--primary);color:#fff}.danger{background:var(--danger);color:#fff}.success{background:var(--success);color:#fff}.light{background:#eef2f7;color:#17202a}
+.section{margin-top:18px}.section h2{font-size:18px;margin:0 0 12px}
+.search{width:100%;padding:13px;border:1px solid var(--line);border-radius:10px;font-size:15px;margin-bottom:12px}
+.supplier-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.supplier{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:700;background:#fff7ed;color:#c2410c}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:12px;color:var(--muted)}
+.status{font-weight:700;font-size:12px}.waiting{color:var(--warning)}.arrived{color:var(--success)}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}
+label{font-size:13px;font-weight:700}input,select,textarea{width:100%;margin-top:6px;padding:11px;border:1px solid var(--line);border-radius:9px;font:inherit;background:#fff}textarea{min-height:80px;resize:vertical}
+.modal{position:fixed;inset:0;background:#0007;display:none;align-items:center;justify-content:center;padding:18px;z-index:30}.modal.open{display:flex}.modalbox{background:#fff;border-radius:15px;max-width:650px;width:100%;max-height:90vh;overflow:auto;padding:20px}
+.empty{text-align:center;padding:30px;color:var(--muted)}
+.hidden{display:none!important}
+@media(max-width:700px){main{padding:12px}.grid{grid-template-columns:1fr}.supplier-grid{grid-template-columns:1fr}.form{grid-template-columns:1fr}.full{grid-column:auto}table{font-size:13px}th:nth-child(4),td:nth-child(4){display:none}.head{padding:13px}}
+</style>
+</head>
+<body>
+<header><div class="head"><div><h1>📦 PorositeDitore</h1><div class="sub">Menaxhimi i porosive dhe furnitorëve</div></div><button class="light" onclick="openOrder()">+ Porosi</button></div></header>
+
+<main>
+<div class="grid">
+ <div class="card stat"><span class="muted">🔴 Për t'u pranuar</span><b id="waitingCount">0</b></div>
+ <div class="card stat"><span class="muted">🟡 Porosi të hapura</span><b id="openCount">0</b></div>
+ <div class="card stat"><span class="muted">🟢 Të pranuara</span><b id="arrivedCount">0</b></div>
+</div>
+
+<div class="nav">
+ <button class="primary" onclick="showView('waiting')">🔴 Çfarë presim</button>
+ <button class="light" onclick="showView('suppliers')">🏢 Furnitorët</button>
+ <button class="light" onclick="showView('history')">📜 Historiku</button>
+ <button class="light" onclick="openSupplier()">+ Furnitor</button>
+</div>
+
+<section id="waiting" class="section">
+ <div class="card">
+  <h2>🔴 Çfarë presim</h2>
+  <input id="searchWaiting" class="search" placeholder="Kërko produkt, furnitor..." oninput="renderWaiting()">
+  <div id="waitingTable"></div>
+ </div>
+</section>
+
+<section id="suppliers" class="section hidden">
+ <div class="card">
+  <h2>🏢 Furnitorët</h2>
+  <input id="searchSupplier" class="search" placeholder="Kërko furnitor..." oninput="renderSuppliers()">
+  <div id="supplierList" class="supplier-grid"></div>
+ </div>
+</section>
+
+<section id="history" class="section hidden">
+ <div class="card">
+  <h2>📜 Historiku</h2>
+  <input id="searchHistory" class="search" placeholder="Kërko..." oninput="renderHistory()">
+  <div id="historyTable"></div>
+ </div>
+</section>
+</main>
+
+<div id="orderModal" class="modal"><div class="modalbox">
+<h2 id="orderTitle">➕ Shto porosi</h2>
+<form id="orderForm" class="form">
+<input type="hidden" id="editId">
+<div><label>Furnitori<select id="supplier" required></select></label></div>
+<div><label>Data<input id="orderDate" type="date" required></label></div>
+<div class="full"><label>Produkti<input id="product" required placeholder="p.sh. Bagllam amortizer"></label></div>
+<div><label>Sasia<input id="qty" required placeholder="p.sh. 28"></label></div>
+<div><label>Njësia<input id="unit" placeholder="copë, pako, kg..."></label></div>
+<div class="full"><label>Specifikimi / dimensionet<textarea id="spec" placeholder="p.sh. Gjerësia 11.4 cm, lartësia 70 cm"></textarea></label></div>
+<div class="full"><label>Shënim<textarea id="note" placeholder="Shënim shtesë..."></textarea></label></div>
+<div class="full actions"><button type="button" class="light" onclick="closeModal('orderModal')">Anulo</button><button class="primary">Ruaj porosinë</button></div>
+</form></div></div>
+
+<div id="supplierModal" class="modal"><div class="modalbox">
+<h2>🏢 Shto furnitor</h2>
+<form id="supplierForm">
+<label>Emri i furnitorit<input id="newSupplier" required placeholder="p.sh. Blum"></label>
+<div class="actions" style="margin-top:15px"><button type="button" class="light" onclick="closeModal('supplierModal')">Anulo</button><button class="primary">Ruaj</button></div>
+</form></div></div>
+
+<script>
+const seedSuppliers=["Blum","Besniki","Arsimi","Ariani","Remujasi","Doqi","Leka metal"];
+let suppliers=JSON.parse(localStorage.getItem("pd_suppliers")||"null")||seedSuppliers;
+let orders=JSON.parse(localStorage.getItem("pd_orders")||"null")||[
+["Blum","Bagllam te drejta amortizer","28","","","","waiting"],
+["Blum","Bagllam kendi me amortizer","2","","","","waiting"],
+["Blum","Bagllam Click","6","","","","waiting"],
+["Blum","Click","3","","","","waiting"],
+["Blum","Depo 15 cm","1","","Dollapi: gjeresia 11.4 cm, lartesia 70 cm","","waiting"],
+["Blum","Bagllam amortizer 155*","4","","","","waiting"],
+["Blum","HKS","4","","Dera W 60 cm, H 40 cm","","waiting"],
+["Blum","Fijoke e gjere e bardhe Legrabox","1","45 cm","","","waiting"],
+["Blum","Fijoke e ngushte e bardhe Legrabox","1","45 cm","","","waiting"],
+["Blum","Fijoke e ngushte e bardhe Legrabox","2","50 cm e mbrendshme","","","waiting"],
+["Blum","Fijoke e gjere e bardhe Legrabox","1","50 cm e mbrendshme","","","waiting"],
+["Blum","Lavaman Blanco inox","2","","","","waiting"],
+["Blum","Alumin te uji","2","60 cm","","","waiting"],
+["Blum","Plastike per luge","1","90 cm","","","waiting"],
+["Blum","Kembe kuzhine","40 + 8F","15 cm","","","waiting"],
+["Blum","Kembe kuzhine","24","10 cm","","","waiting"],
+["Blum","Shin ledi","2","pako","","","waiting"],
+["Blum","Depo metalike 30 cm","1","","Dollapi: gjeresia 26.4 cm, lartesia 70 cm","","waiting"],
+["Blum","Ballore per fijoke te mbrendshme antracit","2","120 cm","","","waiting"],
+["Besniki","Profil Gola 5 cm zi","7.5","","","","waiting"],
+["Besniki","Profil Gola 7 cm zi","14.1","","","","waiting"],
+["Besniki","Lidhese gola","","","","","waiting"],
+["Arsimi","Mekanizem me terheqje","1","","","","waiting"],
+["Ariani","Bagllam per click","30","cope","","","waiting"],
+["Remujasi","Click","15","","","","waiting"],
+["Doqi","Fijoke tandem","3","45 cm","","","waiting"],
+["Leka metal","Metalet ankerues","","","","","waiting"]
+].map((x,i)=>({id:Date.now()+i,supplier:x[0],product:x[1],qty:x[2],unit:x[3],spec:x[4],note:x[5],status:x[6],date:new Date().toISOString().slice(0,10),arrivedDate:""}));
+
+function save(){localStorage.setItem("pd_suppliers",JSON.stringify(suppliers));localStorage.setItem("pd_orders",JSON.stringify(orders));updateStats();renderWaiting();renderSuppliers();renderHistory();}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+function updateStats(){document.getElementById("waitingCount").textContent=orders.filter(o=>o.status==="waiting").length;document.getElementById("openCount").textContent=orders.filter(o=>o.status==="waiting").length;document.getElementById("arrivedCount").textContent=orders.filter(o=>o.status==="arrived").length;}
+function showView(v){["waiting","suppliers","history"].forEach(x=>document.getElementById(x).classList.toggle("hidden",x!==v));}
+function openOrder(order=null){
+ document.getElementById("orderModal").classList.add("open");
+ document.getElementById("orderTitle").textContent=order?"✏️ Ndrysho porosi":"➕ Shto porosi";
+ document.getElementById("editId").value=order?.id||"";
+ document.getElementById("supplier").innerHTML=suppliers.map(s=>`<option>${esc(s)}</option>`).join("");
+ document.getElementById("supplier").value=order?.supplier||suppliers[0]||"";
+ document.getElementById("orderDate").value=order?.date||new Date().toISOString().slice(0,10);
+ document.getElementById("product").value=order?.product||"";document.getElementById("qty").value=order?.qty||"";
+ document.getElementById("unit").value=order?.unit||"";document.getElementById("spec").value=order?.spec||"";document.getElementById("note").value=order?.note||"";
+}
+function openSupplier(){document.getElementById("supplierModal").classList.add("open");document.getElementById("newSupplier").value="";document.getElementById("newSupplier").focus();}
+function closeModal(id){document.getElementById(id).classList.remove("open");}
+document.getElementById("orderForm").onsubmit=e=>{e.preventDefault();let id=document.getElementById("editId").value;let obj={id:id?Number(id):Date.now(),supplier:document.getElementById("supplier").value,product:document.getElementById("product").value.trim(),qty:document.getElementById("qty").value.trim(),unit:document.getElementById("unit").value.trim(),spec:document.getElementById("spec").value.trim(),note:document.getElementById("note").value.trim(),date:document.getElementById("orderDate").value,status:"waiting",arrivedDate:""};let old=orders.find(o=>o.id===obj.id);if(old)obj.status=old.status,obj.arrivedDate=old.arrivedDate;orders=old?orders.map(o=>o.id===obj.id?obj:o):[obj,...orders];closeModal("orderModal");save();};
+document.getElementById("supplierForm").onsubmit=e=>{e.preventDefault();let s=document.getElementById("newSupplier").value.trim();if(s&&!suppliers.some(x=>x.toLowerCase()===s.toLowerCase())){suppliers.push(s);save();}closeModal("supplierModal");};
+function arrive(id){let o=orders.find(x=>x.id===id);if(!o)return;if(confirm(`A ka ardhur "${o.product}"?`)){o.status="arrived";o.arrivedDate=new Date().toISOString().slice(0,10);save();}}
+function reopen(id){let o=orders.find(x=>x.id===id);if(o){o.status="waiting";o.arrivedDate="";save();}}
+function del(id){if(confirm("A dëshiron ta fshish këtë porosi?")){orders=orders.filter(o=>o.id!==id);save();}}
+function renderWaiting(){
+ let q=(document.getElementById("searchWaiting").value||"").toLowerCase();
+ let a=orders.filter(o=>o.status==="waiting"&&(o.product+" "+o.supplier+" "+o.spec).toLowerCase().includes(q));
+ if(!a.length){document.getElementById("waitingTable").innerHTML='<div class="empty">🎉 Nuk ka porosi që presin.</div>';return}
+ document.getElementById("waitingTable").innerHTML=`<div style="overflow:auto"><table><thead><tr><th>Furnitori</th><th>Produkti</th><th>Sasia</th><th>Specifikimi</th><th>Data</th><th>Veprime</th></tr></thead><tbody>${a.map(o=>`<tr><td><b>${esc(o.supplier)}</b></td><td>${esc(o.product)}${o.note?`<div class="muted">${esc(o.note)}</div>`:""}</td><td><b>${esc(o.qty)}</b> ${esc(o.unit)}</td><td>${esc(o.spec)}</td><td>${esc(o.date)}</td><td><div class="actions"><button class="success" onclick="arrive(${o.id})">✓ Erdhi</button><button class="light" onclick='openOrder(${JSON.stringify(o)})'>✏️</button><button class="danger" onclick="del(${o.id})">Fshi</button></div></td></tr>`).join("")}</tbody></table></div>`;
+}
+function renderSuppliers(){
+ let q=(document.getElementById("searchSupplier").value||"").toLowerCase();
+ let a=suppliers.filter(s=>s.toLowerCase().includes(q));
+ document.getElementById("supplierList").innerHTML=a.map(s=>{let n=orders.filter(o=>o.supplier===s&&o.status==="waiting").length;return `<div class="card supplier"><div><b>🏢 ${esc(s)}</b><div class="muted">${n} porosi në pritje</div></div><button class="primary" onclick="filterSupplier('${esc(s).replace(/'/g,"\\'")}')">Hap</button></div>`}).join("")||'<div class="empty">Nuk u gjet furnitori.</div>';
+}
+function filterSupplier(s){document.getElementById("searchWaiting").value=s;showView("waiting");renderWaiting();}
+function renderHistory(){
+ let q=(document.getElementById("searchHistory").value||"").toLowerCase();
+ let a=orders.filter(o=>(o.product+" "+o.supplier+" "+o.spec).toLowerCase().includes(q)).sort((a,b)=>b.date.localeCompare(a.date));
+ if(!a.length){document.getElementById("historyTable").innerHTML='<div class="empty">Nuk ka histori.</div>';return}
+ document.getElementById("historyTable").innerHTML=`<div style="overflow:auto"><table><thead><tr><th>Data</th><th>Furnitori</th><th>Produkti</th><th>Sasia</th><th>Statusi</th><th>Veprime</th></tr></thead><tbody>${a.map(o=>`<tr><td>${esc(o.date)}</td><td>${esc(o.supplier)}</td><td>${esc(o.product)}<div class="muted">${esc(o.spec)}</div></td><td>${esc(o.qty)} ${esc(o.unit)}</td><td class="status ${o.status==="arrived"?"arrived":"waiting"}">${o.status==="arrived"?"🟢 Erdhi":"🟡 Porositur"}${o.arrivedDate?`<div class="muted">Pranuar: ${esc(o.arrivedDate)}</div>`:""}</td><td><div class="actions">${o.status==="arrived"?`<button class="light" onclick="reopen(${o.id})">↩ Hape</button>`:""}<button class="light" onclick='openOrder(${JSON.stringify(o)})'>✏️</button><button class="danger" onclick="del(${o.id})">Fshi</button></div></td></tr>`).join("")}</tbody></table></div>`;
+}
+updateStats();renderWaiting();renderSuppliers();renderHistory();
+</script>
+</body>
+</html>
