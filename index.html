@@ -271,6 +271,68 @@ th{
   margin-top:4px;
 }
 
+
+/* =========================================================
+   LOGIN / AUTH
+========================================================= */
+#loginScreen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.login-card{
+  width:100%;
+  max-width:430px;
+  background:white;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 10px 30px #00000012;
+}
+.login-card h1{
+  text-align:center;
+  margin-bottom:6px;
+}
+.login-card .subtitle{
+  text-align:center;
+  color:var(--muted);
+  margin-bottom:22px;
+}
+.login-card .form{
+  grid-template-columns:1fr;
+}
+.login-card .actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.login-card .actions button{
+  width:100%;
+}
+#authMsg{
+  margin-top:12px;
+}
+.user-box{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.user-email{
+  font-size:13px;
+  color:#cbd5e1;
+}
+@media(max-width:600px){
+  .login-card .actions{
+    grid-template-columns:1fr;
+  }
+  .user-email{
+    display:none;
+  }
+}
+
 @media(max-width:800px){
   .grid{
     grid-template-columns:repeat(2,1fr);
@@ -333,6 +395,35 @@ th{
 
 <body>
 
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <h1>📦 Porositë</h1>
+    <div class="subtitle">Hyr në llogarinë tënde për të menaxhuar porositë.</div>
+
+    <div class="form">
+      <div>
+        <label>Email</label>
+        <input id="loginEmail" type="email" value="promobiprojektet@gmail.com" placeholder="Email-i yt">
+      </div>
+
+      <div>
+        <label>Fjalëkalimi</label>
+        <input id="loginPassword" type="password" placeholder="Minimumi 6 karaktere">
+      </div>
+
+      <div id="authMsg"></div>
+
+      <div class="actions">
+        <button class="primary" onclick="signIn()">Hyr</button>
+        <button class="light" onclick="signUp()">Krijo llogari</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appShell" style="display:none">
 <header>
   <div class="head">
     <div>
@@ -340,7 +431,11 @@ th{
       <div class="subtitle">Menaxhimi i porosive dhe furnitorëve</div>
     </div>
 
-    <button class="light" onclick="loadAll()">↻ Rifresko</button>
+    <div class="user-box">
+      <span id="userEmail" class="user-email"></span>
+      <button class="light" onclick="loadAll()">↻ Rifresko</button>
+      <button class="light" onclick="signOut()">Dil</button>
+    </div>
   </div>
 </header>
 
@@ -512,6 +607,7 @@ th{
   </section>
 
 </main>
+</div>
 
 
 <script>
@@ -531,6 +627,112 @@ const supabaseClient =
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
   );
+
+
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
+let currentUser = null;
+
+function setAuthMessage(text, type = "ok") {
+  const box = document.getElementById("authMsg");
+  if (!box) return;
+  box.innerHTML = `<div class="status ${type}">${escapeHtml(text)}</div>`;
+}
+
+async function signIn() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+
+  if (!email || !password) {
+    setAuthMessage("Shkruaj emailin dhe fjalëkalimin.", "error");
+    return;
+  }
+
+  setAuthMessage("Duke u kyçur...");
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    console.error(error);
+    setAuthMessage("Nuk mund të hysh: " + error.message, "error");
+    return;
+  }
+
+  await handleSession(data.session);
+}
+
+async function signUp() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+
+  if (!email || !password) {
+    setAuthMessage("Shkruaj emailin dhe fjalëkalimin.", "error");
+    return;
+  }
+
+  if (password.length < 6) {
+    setAuthMessage("Fjalëkalimi duhet të ketë të paktën 6 karaktere.", "error");
+    return;
+  }
+
+  setAuthMessage("Duke krijuar llogarinë...");
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email,
+    password
+  });
+
+  if (error) {
+    console.error(error);
+    setAuthMessage("Llogaria nuk u krijua: " + error.message, "error");
+    return;
+  }
+
+  if (data.session) {
+    setAuthMessage("Llogaria u krijua me sukses.");
+    await handleSession(data.session);
+  } else {
+    setAuthMessage(
+      "Llogaria u krijua. Kontrollo emailin dhe kliko lidhjen e konfirmimit para se të hysh.",
+      "ok"
+    );
+  }
+}
+
+async function signOut() {
+  await supabaseClient.auth.signOut();
+}
+
+async function handleSession(session) {
+  currentUser = session?.user || null;
+
+  const loginScreen = document.getElementById("loginScreen");
+  const appShell = document.getElementById("appShell");
+  const userEmail = document.getElementById("userEmail");
+
+  if (currentUser) {
+    loginScreen.style.display = "none";
+    appShell.style.display = "block";
+    userEmail.textContent = currentUser.email || "";
+    await loadAll();
+  } else {
+    appShell.style.display = "none";
+    loginScreen.style.display = "flex";
+    document.getElementById("loginPassword").value = "";
+  }
+}
+
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  setTimeout(() => handleSession(session), 0);
+});
+
+supabaseClient.auth.getSession().then(({ data }) => {
+  handleSession(data.session);
+});
 
 
 /* =========================================================
@@ -593,6 +795,7 @@ async function loadSuppliers() {
     await supabaseClient
       .from("suppliers")
       .select("*")
+      .eq("user_id", currentUser.id)
       .order("name");
 
   if (error) {
@@ -612,6 +815,7 @@ async function loadProducts() {
     await supabaseClient
       .from("products")
       .select("*")
+      .eq("user_id", currentUser.id)
       .order("name");
 
   if (error) {
@@ -644,6 +848,7 @@ async function loadOrders() {
         created_at,
         suppliers(name)
       `)
+      .eq("user_id", currentUser.id)
       .order("created_at", { ascending:false });
 
   if (error) {
@@ -662,6 +867,8 @@ async function loadOrders() {
 ========================================================= */
 
 async function loadAll() {
+
+  if (!currentUser) return;
 
   try {
 
@@ -1043,6 +1250,11 @@ function renderOrders() {
 
 async function addOrder() {
 
+  if (!currentUser) {
+    showMessage("Duhet të jesh i kyçur.", "error");
+    return;
+  }
+
   const supplierId =
     document.getElementById("supplier").value;
 
@@ -1112,6 +1324,7 @@ async function addOrder() {
       .from("orders")
       .insert({
 
+        user_id: currentUser.id,
         supplier_id: supplierId,
 
         product_id: productId,
@@ -1168,6 +1381,11 @@ async function addOrder() {
 
 async function markArrived(id) {
 
+  if (!currentUser) {
+    showMessage("Duhet të jesh i kyçur.", "error");
+    return;
+  }
+
   const { error } =
     await supabaseClient
       .from("orders")
@@ -1179,7 +1397,8 @@ async function markArrived(id) {
           new Date().toISOString()
 
       })
-      .eq("id", id);
+      .eq("id", id)
+      .eq("user_id", currentUser.id);
 
 
   if (error) {
@@ -1210,6 +1429,11 @@ async function markArrived(id) {
 
 async function markWaiting(id) {
 
+  if (!currentUser) {
+    showMessage("Duhet të jesh i kyçur.", "error");
+    return;
+  }
+
   const { error } =
     await supabaseClient
       .from("orders")
@@ -1220,7 +1444,8 @@ async function markWaiting(id) {
         arrived_date: null
 
       })
-      .eq("id", id);
+      .eq("id", id)
+      .eq("user_id", currentUser.id);
 
 
   if (error) {
@@ -1251,6 +1476,11 @@ async function markWaiting(id) {
 
 async function deleteOrder(id) {
 
+  if (!currentUser) {
+    showMessage("Duhet të jesh i kyçur.", "error");
+    return;
+  }
+
   const confirmed =
     confirm(
       "A je i sigurt që dëshiron ta fshish këtë porosi?"
@@ -1265,7 +1495,8 @@ async function deleteOrder(id) {
     await supabaseClient
       .from("orders")
       .delete()
-      .eq("id", id);
+      .eq("id", id)
+      .eq("user_id", currentUser.id);
 
 
   if (error) {
@@ -1360,8 +1591,7 @@ document
 /* =========================================================
    START
 ========================================================= */
-
-loadAll();
+// Aplikacioni nis përmes Supabase Auth më lart.
 
 </script>
 
