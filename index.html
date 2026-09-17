@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="sq">
 <head>
@@ -271,7 +272,6 @@ th{
   margin-top:4px;
 }
 
-
 .login-wrap{
   min-height:100vh;
   display:flex;
@@ -279,6 +279,7 @@ th{
   justify-content:center;
   padding:20px;
 }
+
 .login-card{
   width:100%;
   max-width:430px;
@@ -288,26 +289,32 @@ th{
   padding:24px;
   box-shadow:0 8px 30px #00000012;
 }
+
 .login-card h1{
   color:var(--text);
   margin-bottom:6px;
 }
+
 .login-card .subtitle{
   color:var(--muted);
   margin-bottom:20px;
 }
+
 .auth-actions{
   display:flex;
   gap:8px;
 }
+
 .auth-actions button{
   flex:1;
 }
+
 #authMsg{
   margin-top:8px;
 }
 
 @media(max-width:800px){
+
   .grid{
     grid-template-columns:repeat(2,1fr);
   }
@@ -318,6 +325,7 @@ th{
 }
 
 @media(max-width:600px){
+
   .head{
     padding:13px 14px;
   }
@@ -369,126 +377,320 @@ th{
 
 <body>
 
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
 <div id="loginScreen" class="login-wrap">
+
   <div class="login-card">
+
     <h1>📦 Porositë</h1>
-    <div class="subtitle">Hyr në llogarinë tënde për të menaxhuar porositë.</div>
-    <div class="form">
-      <div class="full">
-        <label>Email</label>
-        <input id="loginEmail" type="email" value="promobiprojektet@gmail.com" autocomplete="email" placeholder="Email-i yt">
-      </div>
-      <div class="full">
-        <label>Fjalëkalimi</label>
-        <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Minimumi 6 karaktere">
-      </div>
-      <div id="authMsg" class="full"></div>
-      <div class="full auth-actions">
-        <button class="primary" onclick="signIn()">Hyr</button>
-        <button class="light" onclick="signUp()">Krijo llogari</button>
-      </div>
+
+    <div class="subtitle">
+      Hyr në llogarinë tënde për të menaxhuar porositë.
     </div>
+
+    <div class="form">
+
+      <div class="full">
+
+        <label>Email</label>
+
+        <input
+          id="loginEmail"
+          type="email"
+          value="promobiprojektet@gmail.com"
+          autocomplete="email"
+          placeholder="Email-i yt">
+
+      </div>
+
+      <div class="full">
+
+        <label>Fjalëkalimi</label>
+
+        <input
+          id="loginPassword"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Minimumi 6 karaktere">
+
+      </div>
+
+      <div id="authMsg" class="full"></div>
+
+      <div class="full auth-actions">
+
+        <button class="primary" onclick="signIn()">
+          Hyr
+        </button>
+
+        <button class="light" onclick="signUp()">
+          Krijo llogari
+        </button>
+
+      </div>
+
+    </div>
+
   </div>
+
 </div>
+
+
+<!-- =====================================================
+     APP
+===================================================== -->
 
 <div id="appShell" style="display:none">
 
 <header>
+
   <div class="head">
+
     <div>
+
       <h1>📦 Porositë</h1>
-      <div class="subtitle">Menaxhimi i porosive dhe furnitorëve</div>
+
+      <div class="subtitle">
+        Menaxhimi i porosive dhe furnitorëve
+      </div>
+
     </div>
 
     <div class="actions">
-      <span id="userEmail" style="font-size:13px;color:#cbd5e1"></span>
-      <button class="light" onclick="loadAll()">↻ Rifresko</button>
-      <button class="light" onclick="signOut()">Dil</button>
+
+      <span
+        id="userEmail"
+        style="font-size:13px;color:#cbd5e1">
+      </span>
+
+      <button
+        class="light"
+        onclick="loadAll()">
+        ↻ Rifresko
+      </button>
+
+      <button
+        class="light"
+        onclick="signOut()">
+        Dil
+      </button>
+
     </div>
+
   </div>
+
 </header>
+
 
 <main>
 
   <div id="message"></div>
 
-  <!-- STATISTIKAT -->
+
+  <!-- =================================================
+       STATISTIKAT
+  ================================================== -->
+
   <div class="grid">
 
     <div class="card">
-      <div class="muted">Porosi në pritje</div>
-      <div class="stat" id="waitingCount">0</div>
+
+      <div class="muted">
+        Porosi në pritje
+      </div>
+
+      <div
+        class="stat"
+        id="waitingCount">
+        0
+      </div>
+
     </div>
 
-    <div class="card">
-      <div class="muted">Porosi të ardhura</div>
-      <div class="stat" id="arrivedCount">0</div>
-    </div>
 
     <div class="card">
-      <div class="muted">Gjithsej porosi</div>
-      <div class="stat" id="totalCount">0</div>
+
+      <div class="muted">
+        Porosi të ardhura
+      </div>
+
+      <div
+        class="stat"
+        id="arrivedCount">
+        0
+      </div>
+
     </div>
 
+
     <div class="card">
-      <div class="muted">Furnitorë</div>
-      <div class="stat" id="supplierCount">0</div>
+
+      <div class="muted">
+        Gjithsej porosi
+      </div>
+
+      <div
+        class="stat"
+        id="totalCount">
+        0
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="muted">
+        Furnitorë
+      </div>
+
+      <div
+        class="stat"
+        id="supplierCount">
+        0
+      </div>
+
     </div>
 
   </div>
 
 
-  <!-- SHTO POROSI -->
+  <!-- =================================================
+       SHTO POROSI
+  ================================================== -->
+
   <section class="card">
 
-    <h2>➕ Shto porosi të re</h2>
+    <h2>
+      ➕ Shto porosi të re
+    </h2>
 
     <div class="form">
 
+
+      <!-- FURNITORI -->
+
       <div>
-        <label>Furnitori</label>
+
+        <label>
+          Furnitori
+        </label>
+
         <select id="supplier">
-          <option value="">Zgjidh furnitorin...</option>
+
+          <option value="">
+            Zgjidh furnitorin...
+          </option>
+
         </select>
+
       </div>
 
-      <div>
-        <label>Produkti</label>
-        <select id="product">
-          <option value="">Zgjidh produktin...</option>
-        </select>
-      </div>
+
+      <!-- PRODUKTI - TANI SHKRUAHET ME DORE -->
 
       <div>
-        <label>Sasia</label>
-        <input id="quantity" type="text" placeholder="p.sh. 5">
+
+        <label>
+          Produkti
+        </label>
+
+        <input
+          id="productName"
+          type="text"
+          placeholder="Shkruaj emrin e produktit...">
+
       </div>
 
+
+      <!-- SASIA -->
+
       <div>
-        <label>Njësia</label>
-        <input id="unit" type="text" placeholder="cope, pako, metra...">
+
+        <label>
+          Sasia
+        </label>
+
+        <input
+          id="quantity"
+          type="text"
+          placeholder="p.sh. 5">
+
       </div>
+
+
+      <!-- NJESIA -->
+
+      <div>
+
+        <label>
+          Njësia
+        </label>
+
+        <input
+          id="unit"
+          type="text"
+          placeholder="cope, pako, metra...">
+
+      </div>
+
+
+      <!-- SPECIFIKIMI -->
 
       <div class="full">
-        <label>Specifikimi</label>
-        <input id="specification" type="text"
-               placeholder="p.sh. 50 cm, zi, 70 cm lartësi...">
+
+        <label>
+          Specifikimi
+        </label>
+
+        <input
+          id="specification"
+          type="text"
+          placeholder="p.sh. 50 cm, zi, 70 cm lartësi...">
+
       </div>
 
+
+      <!-- SHENIM -->
+
       <div class="full">
-        <label>Shënim</label>
-        <textarea id="note"
-          placeholder="Shënime shtesë për porosinë..."></textarea>
+
+        <label>
+          Shënim
+        </label>
+
+        <textarea
+          id="note"
+          placeholder="Shënime shtesë për porosinë...">
+        </textarea>
+
       </div>
+
+
+      <!-- BUTONAT -->
 
       <div class="full actions">
-        <button class="primary" onclick="addOrder()">
+
+        <button
+          class="primary"
+          onclick="addOrder()">
+
           + Ruaj porosinë
+
         </button>
 
-        <button class="light" onclick="clearForm()">
+
+        <button
+          class="light"
+          onclick="clearForm()">
+
           Pastro
+
         </button>
+
       </div>
 
     </div>
@@ -496,31 +698,52 @@ th{
   </section>
 
 
-  <!-- KERKIM -->
+  <!-- =================================================
+       KERKIM
+  ================================================== -->
+
   <section class="card">
 
-    <h2>🔎 Kërko porosi</h2>
+    <h2>
+      🔎 Kërko porosi
+    </h2>
 
     <input
       id="search"
       class="search"
       type="text"
       placeholder="Kërko sipas furnitorit, produktit ose specifikimit..."
-      oninput="renderOrders()"
-    >
+      oninput="renderOrders()">
 
-    <div class="actions" style="margin-top:12px">
 
-      <button class="light" onclick="setFilter('all')">
+    <div
+      class="actions"
+      style="margin-top:12px">
+
+      <button
+        class="light"
+        onclick="setFilter('all')">
+
         Të gjitha
+
       </button>
 
-      <button class="warning" onclick="setFilter('waiting')">
+
+      <button
+        class="warning"
+        onclick="setFilter('waiting')">
+
         Në pritje
+
       </button>
 
-      <button class="success" onclick="setFilter('arrived')">
+
+      <button
+        class="success"
+        onclick="setFilter('arrived')">
+
         Të ardhura
+
       </button>
 
     </div>
@@ -528,45 +751,93 @@ th{
   </section>
 
 
-  <!-- FURNITORËT -->
+  <!-- =================================================
+       FURNITORET
+  ================================================== -->
+
   <section>
 
-    <h2>🏢 Furnitorët</h2>
+    <h2>
+      🏢 Furnitorët
+    </h2>
 
-    <div id="suppliersList" class="supplier-grid">
-      <div class="card empty">Duke ngarkuar...</div>
+    <div
+      id="suppliersList"
+      class="supplier-grid">
+
+      <div class="card empty">
+        Duke ngarkuar...
+      </div>
+
     </div>
 
   </section>
 
 
-  <!-- POROSITE -->
+  <!-- =================================================
+       POROSITE
+  ================================================== -->
+
   <section class="card">
 
-    <h2>📋 Lista e porosive</h2>
+    <h2>
+      📋 Lista e porosive
+    </h2>
 
     <div style="overflow-x:auto">
 
       <table>
 
         <thead>
+
           <tr>
-            <th>Furnitori</th>
-            <th>Produkti</th>
-            <th>Sasia</th>
-            <th>Specifikimi</th>
-            <th>Data</th>
-            <th>Statusi</th>
-            <th>Veprime</th>
+
+            <th>
+              Furnitori
+            </th>
+
+            <th>
+              Produkti
+            </th>
+
+            <th>
+              Sasia
+            </th>
+
+            <th>
+              Specifikimi
+            </th>
+
+            <th>
+              Data
+            </th>
+
+            <th>
+              Statusi
+            </th>
+
+            <th>
+              Veprime
+            </th>
+
           </tr>
+
         </thead>
 
         <tbody id="ordersTable">
+
           <tr>
-            <td colspan="7" class="empty">
+
+            <td
+              colspan="7"
+              class="empty">
+
               Duke ngarkuar...
+
             </td>
+
           </tr>
+
         </tbody>
 
       </table>
@@ -578,6 +849,7 @@ th{
 </main>
 
 </div>
+
 
 <script>
 
@@ -603,8 +875,9 @@ const supabaseClient =
 ========================================================= */
 
 let currentUser = null;
+
 let suppliers = [];
-let products = [];
+
 let orders = [];
 
 let currentFilter = "all";
@@ -616,7 +889,8 @@ let currentFilter = "all";
 
 function showMessage(text, type = "ok") {
 
-  const box = document.getElementById("message");
+  const box =
+    document.getElementById("message");
 
   box.innerHTML = `
     <div class="status ${type}">
@@ -625,122 +899,310 @@ function showMessage(text, type = "ok") {
   `;
 
   setTimeout(() => {
+
     box.innerHTML = "";
+
   }, 4000);
+
 }
 
 
 /* =========================================================
-   SECURITY / HTML ESCAPE
+   HTML ESCAPE
 ========================================================= */
 
 function escapeHtml(value) {
 
-  if (value === null || value === undefined) {
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
     return "";
+
   }
 
   return String(value)
+
     .replaceAll("&", "&amp;")
+
     .replaceAll("<", "&lt;")
+
     .replaceAll(">", "&gt;")
+
     .replaceAll('"', "&quot;")
+
     .replaceAll("'", "&#039;");
 }
 
 
 /* =========================================================
-   AUTH
+   AUTH MESSAGE
 ========================================================= */
 
-function setAuthMessage(text, type = "ok") {
-  const box = document.getElementById("authMsg");
-  box.innerHTML = text ? `<div class="status ${type}">${escapeHtml(text)}</div>` : "";
+function setAuthMessage(
+  text,
+  type = "ok"
+) {
+
+  const box =
+    document.getElementById("authMsg");
+
+  box.innerHTML =
+    text
+      ? `
+        <div class="status ${type}">
+          ${escapeHtml(text)}
+        </div>
+      `
+      : "";
+
 }
 
-async function signIn() {
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value;
-
-  if (!email || !password) {
-    setAuthMessage("Shkruaj emailin dhe fjalëkalimin.", "error");
-    return;
-  }
-
-  setAuthMessage("Duke hyrë...");
-
-  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
-  if (error) {
-    console.error(error);
-    setAuthMessage("Hyrja dështoi: " + error.message, "error");
-    return;
-  }
-
-  await handleSession(data.session);
-}
-
-async function signUp() {
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value;
-
-  if (!email || !password) {
-    setAuthMessage("Shkruaj emailin dhe fjalëkalimin.", "error");
-    return;
-  }
-
-  if (password.length < 6) {
-    setAuthMessage("Fjalëkalimi duhet të ketë së paku 6 karaktere.", "error");
-    return;
-  }
-
-  setAuthMessage("Duke krijuar llogarinë...");
-
-  const { data, error } = await supabaseClient.auth.signUp({ email, password });
-
-  if (error) {
-    console.error(error);
-    setAuthMessage("Llogaria nuk u krijua: " + error.message, "error");
-    return;
-  }
-
-  if (data.session) {
-    setAuthMessage("Llogaria u krijua.");
-    await handleSession(data.session);
-  } else {
-    setAuthMessage("Llogaria u krijua. Kontrollo emailin për konfirmim dhe pastaj hyr.");
-  }
-}
-
-async function signOut() {
-  await supabaseClient.auth.signOut();
-}
-
-async function handleSession(session) {
-  currentUser = session?.user || null;
-
-  const loginScreen = document.getElementById("loginScreen");
-  const appShell = document.getElementById("appShell");
-  const userEmail = document.getElementById("userEmail");
-
-  if (currentUser) {
-    loginScreen.style.display = "none";
-    appShell.style.display = "block";
-    userEmail.textContent = currentUser.email || "";
-    await loadAll();
-  } else {
-    appShell.style.display = "none";
-    loginScreen.style.display = "flex";
-    document.getElementById("loginPassword").value = "";
-  }
-}
-
-supabaseClient.auth.onAuthStateChange((event, session) => {
-  setTimeout(() => handleSession(session), 0);
-});
 
 /* =========================================================
-   DATA
+   SIGN IN
+========================================================= */
+
+async function signIn() {
+
+  const email =
+    document
+      .getElementById("loginEmail")
+      .value
+      .trim();
+
+  const password =
+    document
+      .getElementById("loginPassword")
+      .value;
+
+
+  if (!email || !password) {
+
+    setAuthMessage(
+      "Shkruaj emailin dhe fjalëkalimin.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  setAuthMessage(
+    "Duke hyrë..."
+  );
+
+
+  const { data, error } =
+    await supabaseClient.auth
+      .signInWithPassword({
+        email,
+        password
+      });
+
+
+  if (error) {
+
+    console.error(error);
+
+    setAuthMessage(
+      "Hyrja dështoi: " +
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  await handleSession(
+    data.session
+  );
+
+}
+
+
+/* =========================================================
+   SIGN UP
+========================================================= */
+
+async function signUp() {
+
+  const email =
+    document
+      .getElementById("loginEmail")
+      .value
+      .trim();
+
+  const password =
+    document
+      .getElementById("loginPassword")
+      .value;
+
+
+  if (!email || !password) {
+
+    setAuthMessage(
+      "Shkruaj emailin dhe fjalëkalimin.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if (password.length < 6) {
+
+    setAuthMessage(
+      "Fjalëkalimi duhet të ketë së paku 6 karaktere.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  setAuthMessage(
+    "Duke krijuar llogarinë..."
+  );
+
+
+  const { data, error } =
+    await supabaseClient.auth
+      .signUp({
+        email,
+        password
+      });
+
+
+  if (error) {
+
+    console.error(error);
+
+    setAuthMessage(
+      "Llogaria nuk u krijua: " +
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if (data.session) {
+
+    setAuthMessage(
+      "Llogaria u krijua."
+    );
+
+    await handleSession(
+      data.session
+    );
+
+  } else {
+
+    setAuthMessage(
+      "Llogaria u krijua. Kontrollo emailin për konfirmim dhe pastaj hyr."
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   SIGN OUT
+========================================================= */
+
+async function signOut() {
+
+  await supabaseClient.auth.signOut();
+
+}
+
+
+/* =========================================================
+   HANDLE SESSION
+========================================================= */
+
+async function handleSession(session) {
+
+  currentUser =
+    session?.user || null;
+
+
+  const loginScreen =
+    document.getElementById(
+      "loginScreen"
+    );
+
+  const appShell =
+    document.getElementById(
+      "appShell"
+    );
+
+  const userEmail =
+    document.getElementById(
+      "userEmail"
+    );
+
+
+  if (currentUser) {
+
+    loginScreen.style.display =
+      "none";
+
+    appShell.style.display =
+      "block";
+
+    userEmail.textContent =
+      currentUser.email || "";
+
+
+    await loadAll();
+
+  } else {
+
+    appShell.style.display =
+      "none";
+
+    loginScreen.style.display =
+      "flex";
+
+    document.getElementById(
+      "loginPassword"
+    ).value = "";
+
+  }
+
+}
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+supabaseClient.auth
+  .onAuthStateChange(
+    (event, session) => {
+
+      setTimeout(
+        () => handleSession(session),
+        0
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   LOAD SUPPLIERS
 ========================================================= */
 
 async function loadSuppliers() {
@@ -749,38 +1211,34 @@ async function loadSuppliers() {
     await supabaseClient
       .from("suppliers")
       .select("*")
-      .eq("user_id", currentUser.id)
+      .eq(
+        "user_id",
+        currentUser.id
+      )
       .order("name");
 
+
   if (error) {
+
     throw error;
+
   }
 
-  suppliers = data || [];
+
+  suppliers =
+    data || [];
+
 
   renderSupplierSelect();
+
   renderSuppliers();
+
 }
 
 
-async function loadProducts() {
-
-  const { data, error } =
-    await supabaseClient
-      .from("products")
-      .select("*")
-      .eq("user_id", currentUser.id)
-      .order("name");
-
-  if (error) {
-    throw error;
-  }
-
-  products = data || [];
-
-  renderProductSelect();
-}
-
+/* =========================================================
+   LOAD ORDERS
+========================================================= */
 
 async function loadOrders() {
 
@@ -790,7 +1248,6 @@ async function loadOrders() {
       .select(`
         id,
         supplier_id,
-        product_id,
         product_name,
         quantity,
         unit,
@@ -802,17 +1259,33 @@ async function loadOrders() {
         created_at,
         suppliers(name)
       `)
-      .eq("user_id", currentUser.id)
-      .order("created_at", { ascending:false });
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
 
   if (error) {
+
     throw error;
+
   }
 
-  orders = data || [];
+
+  orders =
+    data || [];
+
 
   renderOrders();
+
   renderStats();
+
 }
 
 
@@ -824,24 +1297,34 @@ async function loadAll() {
 
   try {
 
-    showMessage("Duke ngarkuar të dhënat...");
+    showMessage(
+      "Duke ngarkuar të dhënat..."
+    );
+
 
     await loadSuppliers();
-    await loadProducts();
+
     await loadOrders();
 
-    showMessage("Të dhënat u ngarkuan me sukses.");
+
+    showMessage(
+      "Të dhënat u ngarkuan me sukses."
+    );
+
 
   } catch (error) {
 
     console.error(error);
+
 
     showMessage(
       "Gabim gjatë lidhjes me databazën: " +
       error.message,
       "error"
     );
+
   }
+
 }
 
 
@@ -852,45 +1335,32 @@ async function loadAll() {
 function renderSupplierSelect() {
 
   const select =
-    document.getElementById("supplier");
+    document.getElementById(
+      "supplier"
+    );
+
 
   select.innerHTML =
-    `<option value="">Zgjidh furnitorin...</option>`;
-
-  suppliers.forEach(supplier => {
-
-    select.innerHTML += `
-      <option value="${supplier.id}">
-        ${escapeHtml(supplier.name)}
+    `
+      <option value="">
+        Zgjidh furnitorin...
       </option>
     `;
 
-  });
 
-}
+  suppliers.forEach(
+    supplier => {
 
+      select.innerHTML += `
+        <option value="${supplier.id}">
+          ${escapeHtml(
+            supplier.name
+          )}
+        </option>
+      `;
 
-/* =========================================================
-   PRODUCT SELECT
-========================================================= */
-
-function renderProductSelect() {
-
-  const select =
-    document.getElementById("product");
-
-  select.innerHTML =
-    `<option value="">Zgjidh produktin...</option>`;
-
-  products.forEach(product => {
-
-    select.innerHTML += `
-      <option value="${product.id}">
-        ${escapeHtml(product.name)}
-      </option>
-    `;
-
-  });
+    }
+  );
 
 }
 
@@ -902,63 +1372,96 @@ function renderProductSelect() {
 function renderSuppliers() {
 
   const container =
-    document.getElementById("suppliersList");
+    document.getElementById(
+      "suppliersList"
+    );
+
 
   if (!suppliers.length) {
 
     container.innerHTML =
-      `<div class="card empty">
-        Nuk ka furnitorë.
-      </div>`;
+      `
+        <div class="card empty">
+          Nuk ka furnitorë.
+        </div>
+      `;
 
     return;
+
   }
+
 
   container.innerHTML = "";
 
-  suppliers.forEach(supplier => {
 
-    const supplierOrders =
-      orders.filter(
-        order => order.supplier_id === supplier.id
-      );
+  suppliers.forEach(
+    supplier => {
 
-    const waiting =
-      supplierOrders.filter(
-        order => order.status === "waiting"
-      ).length;
+      const supplierOrders =
+        orders.filter(
+          order =>
+            String(
+              order.supplier_id
+            ) ===
+            String(
+              supplier.id
+            )
+        );
 
-    const arrived =
-      supplierOrders.filter(
-        order => order.status === "arrived"
-      ).length;
 
-    container.innerHTML += `
+      const waiting =
+        supplierOrders.filter(
+          order =>
+            order.status ===
+            "waiting"
+        ).length;
 
-      <div class="supplier">
 
-        <div class="supplier-name">
+      const arrived =
+        supplierOrders.filter(
+          order =>
+            order.status ===
+            "arrived"
+        ).length;
 
-          <span>
-            🏢 ${escapeHtml(supplier.name)}
-          </span>
 
-          <span class="badge waiting">
-            ${waiting} në pritje
-          </span>
+      container.innerHTML += `
+
+        <div class="supplier">
+
+          <div class="supplier-name">
+
+            <span>
+              🏢
+              ${escapeHtml(
+                supplier.name
+              )}
+            </span>
+
+            <span class="badge waiting">
+              ${waiting} në pritje
+            </span>
+
+          </div>
+
+          <div class="small">
+
+            ${supplierOrders.length}
+            porosi gjithsej
+
+            ·
+
+            ${arrived}
+            të ardhura
+
+          </div>
 
         </div>
 
-        <div class="small">
-          ${supplierOrders.length} porosi gjithsej
-          · ${arrived} të ardhura
-        </div>
+      `;
 
-      </div>
-
-    `;
-
-  });
+    }
+  );
 
 }
 
@@ -971,25 +1474,43 @@ function renderStats() {
 
   const waiting =
     orders.filter(
-      order => order.status === "waiting"
+      order =>
+        order.status ===
+        "waiting"
     ).length;
+
 
   const arrived =
     orders.filter(
-      order => order.status === "arrived"
+      order =>
+        order.status ===
+        "arrived"
     ).length;
 
-  document.getElementById("waitingCount").textContent =
+
+  document.getElementById(
+    "waitingCount"
+  ).textContent =
     waiting;
 
-  document.getElementById("arrivedCount").textContent =
+
+  document.getElementById(
+    "arrivedCount"
+  ).textContent =
     arrived;
 
-  document.getElementById("totalCount").textContent =
+
+  document.getElementById(
+    "totalCount"
+  ).textContent =
     orders.length;
 
-  document.getElementById("supplierCount").textContent =
+
+  document.getElementById(
+    "supplierCount"
+  ).textContent =
     suppliers.length;
+
 }
 
 
@@ -999,9 +1520,11 @@ function renderStats() {
 
 function setFilter(filter) {
 
-  currentFilter = filter;
+  currentFilter =
+    filter;
 
   renderOrders();
+
 }
 
 
@@ -1012,186 +1535,298 @@ function setFilter(filter) {
 function renderOrders() {
 
   const tbody =
-    document.getElementById("ordersTable");
+    document.getElementById(
+      "ordersTable"
+    );
+
 
   const search =
-    document.getElementById("search")
-      .value
-      .trim()
-      .toLowerCase();
+    document.getElementById(
+      "search"
+    )
+    .value
+    .trim()
+    .toLowerCase();
 
-  let filtered = [...orders];
+
+  let filtered =
+    [...orders];
 
 
-  if (currentFilter !== "all") {
+  /* FILTER STATUS */
+
+  if (
+    currentFilter !==
+    "all"
+  ) {
 
     filtered =
       filtered.filter(
         order =>
-          order.status === currentFilter
+          order.status ===
+          currentFilter
       );
 
   }
 
 
+  /* SEARCH */
+
   if (search) {
 
     filtered =
-      filtered.filter(order => {
+      filtered.filter(
+        order => {
 
-        const supplier =
-          order.suppliers?.name || "";
+          const supplier =
+            order.suppliers?.name ||
+            "";
 
-        const text = [
 
-          supplier,
-          order.product_name,
-          order.specification,
-          order.note,
-          order.quantity,
-          order.unit
+          const text = [
 
-        ]
-        .join(" ")
-        .toLowerCase();
+            supplier,
 
-        return text.includes(search);
+            order.product_name,
 
-      });
+            order.specification,
+
+            order.note,
+
+            order.quantity,
+
+            order.unit
+
+          ]
+          .join(" ")
+          .toLowerCase();
+
+
+          return text.includes(
+            search
+          );
+
+        }
+      );
 
   }
 
+
+  /* EMPTY */
 
   if (!filtered.length) {
 
     tbody.innerHTML = `
       <tr>
-        <td colspan="7" class="empty">
+
+        <td
+          colspan="7"
+          class="empty">
+
           Nuk u gjet asnjë porosi.
+
         </td>
+
       </tr>
     `;
 
     return;
+
   }
 
 
   tbody.innerHTML = "";
 
 
-  filtered.forEach(order => {
+  /* RENDER */
 
-    const supplier =
-      order.suppliers?.name || "—";
+  filtered.forEach(
+    order => {
 
-    const date =
-      order.order_date
-        ? new Date(order.order_date)
-            .toLocaleDateString("sq-AL")
-        : "—";
+      const supplier =
+        order.suppliers?.name ||
+        "—";
 
 
-    const statusHtml =
-      order.status === "waiting"
+      const date =
+        order.order_date
+          ? new Date(
+              order.order_date
+            )
+            .toLocaleDateString(
+              "sq-AL"
+            )
+          : "—";
 
-        ? `<span class="badge waiting">
-             ⏳ Në pritje
-           </span>`
 
-        : `<span class="badge arrived">
-             ✅ E ardhur
-           </span>`;
+      let statusHtml;
 
 
-    let actionHtml = "";
+      if (
+        order.status ===
+        "waiting"
+      ) {
 
-    if (order.status === "waiting") {
+        statusHtml = `
+          <span class="badge waiting">
+            ⏳ Në pritje
+          </span>
+        `;
 
-      actionHtml = `
+      } else {
+
+        statusHtml = `
+          <span class="badge arrived">
+            ✅ E ardhur
+          </span>
+        `;
+
+      }
+
+
+      let actionHtml = "";
+
+
+      if (
+        order.status ===
+        "waiting"
+      ) {
+
+        actionHtml = `
+          <button
+            class="success"
+            onclick="markArrived('${order.id}')">
+
+            Erdhi
+
+          </button>
+        `;
+
+      } else {
+
+        actionHtml = `
+          <button
+            class="light"
+            onclick="markWaiting('${order.id}')">
+
+            Kthe në pritje
+
+          </button>
+        `;
+
+      }
+
+
+      actionHtml += `
         <button
-          class="success"
-          onclick="markArrived('${order.id}')">
-          Erdhi
+          class="danger"
+          style="margin-left:5px"
+          onclick="deleteOrder('${order.id}')">
+
+          Fshi
+
         </button>
       `;
 
-    } else {
 
-      actionHtml = `
-        <button
-          class="light"
-          onclick="markWaiting('${order.id}')">
-          Kthe në pritje
-        </button>
+      tbody.innerHTML += `
+
+        <tr>
+
+          <td>
+
+            <div class="order-title">
+
+              ${escapeHtml(
+                supplier
+              )}
+
+            </div>
+
+          </td>
+
+
+          <td>
+
+            <div class="order-title">
+
+              ${escapeHtml(
+                order.product_name
+              )}
+
+            </div>
+
+
+            ${
+              order.note
+                ? `
+                  <div class="small">
+                    ${escapeHtml(
+                      order.note
+                    )}
+                  </div>
+                `
+                : ""
+            }
+
+          </td>
+
+
+          <td>
+
+            ${escapeHtml(
+              order.quantity ||
+              "—"
+            )}
+
+            ${escapeHtml(
+              order.unit ||
+              ""
+            )}
+
+          </td>
+
+
+          <td>
+
+            ${escapeHtml(
+              order.specification ||
+              "—"
+            )}
+
+          </td>
+
+
+          <td>
+
+            ${date}
+
+          </td>
+
+
+          <td>
+
+            ${statusHtml}
+
+          </td>
+
+
+          <td>
+
+            <div class="actions">
+
+              ${actionHtml}
+
+            </div>
+
+          </td>
+
+        </tr>
+
       `;
 
     }
-
-
-    actionHtml += `
-      <button
-        class="danger"
-        style="margin-left:5px"
-        onclick="deleteOrder('${order.id}')">
-        Fshi
-      </button>
-    `;
-
-
-    tbody.innerHTML += `
-
-      <tr>
-
-        <td>
-          <div class="order-title">
-            ${escapeHtml(supplier)}
-          </div>
-        </td>
-
-        <td>
-
-          <div class="order-title">
-            ${escapeHtml(order.product_name)}
-          </div>
-
-          ${
-            order.note
-              ? `<div class="small">
-                   ${escapeHtml(order.note)}
-                 </div>`
-              : ""
-          }
-
-        </td>
-
-        <td>
-          ${escapeHtml(order.quantity || "—")}
-          ${escapeHtml(order.unit || "")}
-        </td>
-
-        <td>
-          ${escapeHtml(order.specification || "—")}
-        </td>
-
-        <td>
-          ${date}
-        </td>
-
-        <td>
-          ${statusHtml}
-        </td>
-
-        <td>
-          <div class="actions">
-            ${actionHtml}
-          </div>
-        </td>
-
-      </tr>
-
-    `;
-
-  });
+  );
 
 }
 
@@ -1203,23 +1838,49 @@ function renderOrders() {
 async function addOrder() {
 
   const supplierId =
-    document.getElementById("supplier").value;
+    document.getElementById(
+      "supplier"
+    ).value;
 
-  const productId =
-    document.getElementById("product").value;
+
+  /* PRODUKTI SHKRUHET ME DORE */
+
+  const productName =
+    document.getElementById(
+      "productName"
+    ).value
+    .trim();
+
 
   const quantity =
-    document.getElementById("quantity").value.trim();
+    document.getElementById(
+      "quantity"
+    ).value
+    .trim();
+
 
   const unit =
-    document.getElementById("unit").value.trim();
+    document.getElementById(
+      "unit"
+    ).value
+    .trim();
+
 
   const specification =
-    document.getElementById("specification").value.trim();
+    document.getElementById(
+      "specification"
+    ).value
+    .trim();
+
 
   const note =
-    document.getElementById("note").value.trim();
+    document.getElementById(
+      "note"
+    ).value
+    .trim();
 
+
+  /* VALIDIMI FURNITORIT */
 
   if (!supplierId) {
 
@@ -1229,36 +1890,25 @@ async function addOrder() {
     );
 
     return;
+
   }
 
 
-  if (!productId) {
+  /* VALIDIMI PRODUKTIT */
+
+  if (!productName) {
 
     showMessage(
-      "Zgjidh produktin.",
+      "Shkruaj emrin e produktit.",
       "error"
     );
 
     return;
+
   }
 
 
-  const product =
-    products.find(
-      p => String(p.id) === String(productId)
-    );
-
-
-  if (!product) {
-
-    showMessage(
-      "Produkti nuk u gjet.",
-      "error"
-    );
-
-    return;
-  }
-
+  /* DATA */
 
   const today =
     new Date()
@@ -1266,38 +1916,51 @@ async function addOrder() {
       .slice(0,10);
 
 
+  /* INSERT */
+
   const { error } =
     await supabaseClient
       .from("orders")
       .insert({
 
-        user_id: currentUser.id,
-        supplier_id: supplierId,
+        user_id:
+          currentUser.id,
 
-        product_id: productId,
+        supplier_id:
+          supplierId,
 
-        product_name: product.name,
+        product_name:
+          productName,
 
-        quantity: quantity || null,
+        quantity:
+          quantity || null,
 
-        unit: unit || null,
+        unit:
+          unit || null,
 
         specification:
-          specification || null,
+          specification ||
+          null,
 
         note:
-          note || null,
+          note ||
+          null,
 
-        order_date: today,
+        order_date:
+          today,
 
-        status: "waiting"
+        status:
+          "waiting"
 
       });
 
 
+  /* ERROR */
+
   if (error) {
 
     console.error(error);
+
 
     showMessage(
       "Porosia nuk u ruajt: " +
@@ -1306,14 +1969,21 @@ async function addOrder() {
     );
 
     return;
+
   }
 
 
+  /* PASTRO */
+
   clearForm();
+
+
+  /* RIFRESKO */
 
   await loadOrders();
 
   renderSuppliers();
+
 
   showMessage(
     "✅ Porosia u ruajt me sukses."
@@ -1333,30 +2003,41 @@ async function markArrived(id) {
       .from("orders")
       .update({
 
-        status: "arrived",
+        status:
+          "arrived",
 
         arrived_date:
-          new Date().toISOString()
+          new Date()
+            .toISOString()
 
       })
-      .eq("id", id)
-      .eq("user_id", currentUser.id);
+      .eq(
+        "id",
+        id
+      )
+      .eq(
+        "user_id",
+        currentUser.id
+      );
 
 
   if (error) {
 
     showMessage(
-      "Gabim: " + error.message,
+      "Gabim: " +
+      error.message,
       "error"
     );
 
     return;
+
   }
 
 
   await loadOrders();
 
   renderSuppliers();
+
 
   showMessage(
     "✅ Porosia u shënua si e ardhur."
@@ -1376,29 +2057,40 @@ async function markWaiting(id) {
       .from("orders")
       .update({
 
-        status: "waiting",
+        status:
+          "waiting",
 
-        arrived_date: null
+        arrived_date:
+          null
 
       })
-      .eq("id", id)
-      .eq("user_id", currentUser.id);
+      .eq(
+        "id",
+        id
+      )
+      .eq(
+        "user_id",
+        currentUser.id
+      );
 
 
   if (error) {
 
     showMessage(
-      "Gabim: " + error.message,
+      "Gabim: " +
+      error.message,
       "error"
     );
 
     return;
+
   }
 
 
   await loadOrders();
 
   renderSuppliers();
+
 
   showMessage(
     "Porosia u kthye në pritje."
@@ -1418,8 +2110,11 @@ async function deleteOrder(id) {
       "A je i sigurt që dëshiron ta fshish këtë porosi?"
     );
 
+
   if (!confirmed) {
+
     return;
+
   }
 
 
@@ -1427,8 +2122,14 @@ async function deleteOrder(id) {
     await supabaseClient
       .from("orders")
       .delete()
-      .eq("id", id)
-      .eq("user_id", currentUser.id);
+      .eq(
+        "id",
+        id
+      )
+      .eq(
+        "user_id",
+        currentUser.id
+      );
 
 
   if (error) {
@@ -1440,12 +2141,14 @@ async function deleteOrder(id) {
     );
 
     return;
+
   }
 
 
   await loadOrders();
 
   renderSuppliers();
+
 
   showMessage(
     "Porosia u fshi."
@@ -1460,75 +2163,56 @@ async function deleteOrder(id) {
 
 function clearForm() {
 
-  document.getElementById("supplier").value = "";
+  document.getElementById(
+    "supplier"
+  ).value = "";
 
-  document.getElementById("product").value = "";
 
-  document.getElementById("quantity").value = "";
+  document.getElementById(
+    "productName"
+  ).value = "";
 
-  document.getElementById("unit").value = "";
 
-  document.getElementById("specification").value = "";
+  document.getElementById(
+    "quantity"
+  ).value = "";
 
-  document.getElementById("note").value = "";
+
+  document.getElementById(
+    "unit"
+  ).value = "";
+
+
+  document.getElementById(
+    "specification"
+  ).value = "";
+
+
+  document.getElementById(
+    "note"
+  ).value = "";
 
 }
-
-
-/* =========================================================
-   PRODUCT BY SUPPLIER
-========================================================= */
-
-document
-  .getElementById("supplier")
-  .addEventListener("change", function() {
-
-    const supplierId = this.value;
-
-    const select =
-      document.getElementById("product");
-
-    select.innerHTML =
-      `<option value="">Zgjidh produktin...</option>`;
-
-
-    let list = products;
-
-
-    if (supplierId) {
-
-      list =
-        products.filter(
-          product =>
-            String(product.supplier_id) ===
-            String(supplierId)
-        );
-
-    }
-
-
-    list.forEach(product => {
-
-      select.innerHTML += `
-        <option value="${product.id}">
-          ${escapeHtml(product.name)}
-        </option>
-      `;
-
-    });
-
-  });
 
 
 /* =========================================================
    START
 ========================================================= */
 
-supabaseClient.auth.getSession().then(({ data }) => {
-  handleSession(data.session);
-});
+supabaseClient.auth
+  .getSession()
+  .then(
+    ({ data }) => {
+
+      handleSession(
+        data.session
+      );
+
+    }
+  );
 
 </script>
 
 </body>
 </html>
+```
