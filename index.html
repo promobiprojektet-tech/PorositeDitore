@@ -1,9 +1,9 @@
-```html
 <!doctype html>
 <html lang="sq">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Porositë</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -14,11 +14,13 @@
   --card:#ffffff;
   --text:#17202a;
   --muted:#667085;
-  --line:#e4e7ec;
+  --border:#e4e7ec;
   --primary:#2563eb;
-  --success:#16a34a;
-  --warning:#d97706;
-  --danger:#dc2626;
+  --primary-dark:#1d4ed8;
+  --green:#16a34a;
+  --red:#dc2626;
+  --orange:#d97706;
+  --shadow:0 4px 18px rgba(0,0,0,.06);
 }
 
 *{
@@ -27,252 +29,31 @@
 
 body{
   margin:0;
+  font-family:Arial,Helvetica,sans-serif;
   background:var(--bg);
   color:var(--text);
-  font-family:Arial,sans-serif;
 }
 
-header{
-  background:#17202a;
-  color:white;
-  position:sticky;
-  top:0;
-  z-index:10;
-  box-shadow:0 2px 10px #0002;
-}
-
-.head{
-  max-width:1150px;
-  margin:auto;
-  padding:16px 20px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-}
-
-h1{
-  margin:0;
-  font-size:24px;
-}
-
-.subtitle{
-  color:#cbd5e1;
-  font-size:13px;
-  margin-top:4px;
-}
-
-main{
-  max-width:1150px;
-  margin:auto;
-  padding:20px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-}
-
-.card{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:16px;
-  box-shadow:0 2px 8px #00000008;
-}
-
-.stat{
-  font-size:28px;
-  font-weight:700;
-  margin-top:5px;
-}
-
-.muted{
-  color:var(--muted);
-  font-size:13px;
-}
-
-section{
-  margin-top:18px;
-}
-
-section h2{
-  font-size:19px;
-  margin:0 0 12px;
-}
-
-button{
-  border:0;
-  border-radius:9px;
-  padding:10px 14px;
-  cursor:pointer;
-  font-weight:700;
-}
-
-.primary{
-  background:var(--primary);
-  color:white;
-}
-
-.success{
-  background:var(--success);
-  color:white;
-}
-
-.warning{
-  background:var(--warning);
-  color:white;
-}
-
-.danger{
-  background:var(--danger);
-  color:white;
-}
-
-.light{
-  background:#eef2f7;
-  color:var(--text);
-}
-
-.form{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-}
-
-.full{
-  grid-column:1/-1;
-}
-
-label{
-  font-size:13px;
-  font-weight:700;
-}
-
+button,
 input,
 select,
 textarea{
-  width:100%;
-  margin-top:6px;
-  padding:11px;
-  border:1px solid var(--line);
-  border-radius:9px;
   font:inherit;
-  background:white;
 }
 
-textarea{
-  min-height:80px;
-  resize:vertical;
+button{
+  cursor:pointer;
 }
 
-.actions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
+.hidden{
+  display:none !important;
 }
 
-.search{
-  width:100%;
-  padding:13px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  font-size:15px;
-}
+/* =========================
+   LOGIN
+========================= */
 
-.supplier-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-}
-
-.supplier{
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:14px;
-  background:#fff;
-}
-
-.supplier-name{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  font-weight:700;
-}
-
-.badge{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:700;
-}
-
-.badge.waiting{
-  background:#fff7ed;
-  color:#c2410c;
-}
-
-.badge.arrived{
-  background:#ecfdf3;
-  color:#15803d;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  background:white;
-}
-
-th,
-td{
-  text-align:left;
-  padding:11px 8px;
-  border-bottom:1px solid var(--line);
-  vertical-align:top;
-}
-
-th{
-  font-size:12px;
-  color:var(--muted);
-}
-
-.status{
-  font-size:13px;
-  padding:12px;
-  border-radius:10px;
-  margin-bottom:12px;
-}
-
-.status.ok{
-  background:#ecfdf3;
-  color:#166534;
-}
-
-.status.error{
-  background:#fef2f2;
-  color:#991b1b;
-}
-
-.empty{
-  text-align:center;
-  padding:30px;
-  color:var(--muted);
-}
-
-.order-title{
-  font-weight:700;
-}
-
-.small{
-  font-size:12px;
-  color:var(--muted);
-  margin-top:4px;
-}
-
-.login-wrap{
+.login-screen{
   min-height:100vh;
   display:flex;
   align-items:center;
@@ -280,96 +61,492 @@ th{
   padding:20px;
 }
 
-.login-card{
+.login-box{
   width:100%;
-  max-width:430px;
+  max-width:420px;
   background:white;
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:24px;
-  box-shadow:0 8px 30px #00000012;
+  padding:30px;
+  border-radius:18px;
+  box-shadow:var(--shadow);
 }
 
-.login-card h1{
-  color:var(--text);
-  margin-bottom:6px;
+.login-box h1{
+  margin:0 0 8px;
+  text-align:center;
 }
 
-.login-card .subtitle{
+.login-box p{
   color:var(--muted);
-  margin-bottom:20px;
+  text-align:center;
+  margin-bottom:25px;
 }
 
-.auth-actions{
+.login-box input{
+  width:100%;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  margin-bottom:12px;
+  outline:none;
+}
+
+.login-box input:focus{
+  border-color:var(--primary);
+}
+
+.login-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:5px;
+}
+
+.login-buttons button{
+  padding:12px;
+  border:0;
+  border-radius:10px;
+  color:white;
+  background:var(--primary);
+}
+
+.login-buttons button:last-child{
+  background:#475467;
+}
+
+.login-message{
+  margin-top:15px;
+  padding:10px;
+  border-radius:8px;
+  background:#fef3c7;
+  color:#92400e;
+  display:none;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+  background:#17202a;
+  color:white;
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.header-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+
+.header-title{
+  font-size:22px;
+  font-weight:bold;
+}
+
+.header-subtitle{
+  font-size:13px;
+  color:#cbd5e1;
+  margin-top:3px;
+}
+
+.header-actions{
   display:flex;
   gap:8px;
 }
 
-.auth-actions button{
+.header-actions button{
+  border:0;
+  border-radius:8px;
+  padding:9px 13px;
+  background:#334155;
+  color:white;
+}
+
+.header-actions button:hover{
+  background:#475569;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:white;
+  border-radius:14px;
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:14px;
+}
+
+.stat-value{
+  font-size:28px;
+  font-weight:bold;
+  margin-top:6px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card{
+  background:white;
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:var(--shadow);
+}
+
+.card h2{
+  margin:0 0 16px;
+  font-size:20px;
+}
+
+.card h3{
+  margin:0 0 12px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+.field label{
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  outline:none;
+  background:white;
+}
+
+.field textarea{
+  min-height:80px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:var(--primary);
+}
+
+.form-actions{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+}
+
+.btn{
+  border:0;
+  border-radius:9px;
+  padding:11px 16px;
+  font-weight:bold;
+}
+
+.btn-primary{
+  background:var(--primary);
+  color:white;
+}
+
+.btn-primary:hover{
+  background:var(--primary-dark);
+}
+
+.btn-secondary{
+  background:#eef2f6;
+  color:#344054;
+}
+
+.btn-green{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.btn-red{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.filters{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:16px;
+}
+
+.search-box{
   flex:1;
+  min-width:250px;
 }
 
-#authMsg{
-  margin-top:8px;
+.search-box input{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid var(--border);
+  border-radius:9px;
 }
 
-@media(max-width:800px){
+.filter-btn{
+  padding:10px 15px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:white;
+}
 
-  .grid{
+.filter-btn.active{
+  background:var(--primary);
+  color:white;
+  border-color:var(--primary);
+}
+
+/* =========================
+   SUPPLIERS
+========================= */
+
+.supplier-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.supplier-card{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:15px;
+}
+
+.supplier-name{
+  font-weight:bold;
+  font-size:17px;
+  margin-bottom:8px;
+}
+
+.supplier-info{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:900px;
+}
+
+th,
+td{
+  padding:12px 10px;
+  border-bottom:1px solid var(--border);
+  text-align:left;
+  vertical-align:top;
+}
+
+th{
+  background:#f8fafc;
+  font-size:13px;
+}
+
+td{
+  font-size:14px;
+}
+
+.status{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.status.waiting{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.status.arrived{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.actions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+.actions button{
+  border:0;
+  border-radius:7px;
+  padding:7px 9px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.empty{
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
+}
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:100;
+  max-width:350px;
+  padding:13px 16px;
+  border-radius:10px;
+  color:white;
+  background:#17202a;
+  box-shadow:var(--shadow);
+  display:none;
+}
+
+.message.success{
+  background:var(--green);
+}
+
+.message.error{
+  background:var(--red);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+  .stats{
     grid-template-columns:repeat(2,1fr);
+  }
+
+  .supplier-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:650px){
+
+  .header-inner{
+    align-items:flex-start;
+  }
+
+  .header-actions{
+    flex-direction:column;
+  }
+
+  .header-actions button{
+    padding:7px 10px;
+  }
+
+  .container{
+    padding:12px;
+  }
+
+  .card{
+    padding:15px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .stat{
+    padding:13px;
+  }
+
+  .stat-value{
+    font-size:23px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
   }
 
   .supplier-grid{
     grid-template-columns:1fr;
   }
-}
 
-@media(max-width:600px){
-
-  .head{
-    padding:13px 14px;
+  .form-actions{
+    flex-direction:column;
   }
 
-  main{
-    padding:14px;
+  .form-actions button{
+    width:100%;
   }
 
-  h1{
-    font-size:20px;
-  }
-
-  .grid{
-    grid-template-columns:repeat(2,1fr);
-    gap:8px;
-  }
-
-  .card{
-    padding:12px;
-  }
-
-  .stat{
-    font-size:22px;
-  }
-
-  .form{
+  .login-buttons{
     grid-template-columns:1fr;
-  }
-
-  .full{
-    grid-column:auto;
-  }
-
-  table{
-    font-size:13px;
-  }
-
-  th:nth-child(4),
-  td:nth-child(4){
-    display:none;
-  }
-
-  .actions button{
-    flex:1;
   }
 }
 </style>
@@ -377,104 +554,80 @@ th{
 
 <body>
 
-<!-- =====================================================
+<!-- =========================
      LOGIN
-===================================================== -->
+========================= -->
 
-<div id="loginScreen" class="login-wrap">
+<div id="loginScreen" class="login-screen">
 
-  <div class="login-card">
+  <div class="login-box">
 
     <h1>📦 Porositë</h1>
 
-    <div class="subtitle">
+    <p>
       Hyr në llogarinë tënde për të menaxhuar porositë.
-    </div>
+    </p>
 
-    <div class="form">
+    <input
+      id="email"
+      type="email"
+      placeholder="Email"
+      autocomplete="email"
+    >
 
-      <div class="full">
+    <input
+      id="password"
+      type="password"
+      placeholder="Fjalëkalimi"
+      autocomplete="current-password"
+    >
 
-        <label>Email</label>
+    <div class="login-buttons">
 
-        <input
-          id="loginEmail"
-          type="email"
-          value="promobiprojektet@gmail.com"
-          autocomplete="email"
-          placeholder="Email-i yt">
+      <button onclick="login()">
+        Hyr
+      </button>
 
-      </div>
-
-      <div class="full">
-
-        <label>Fjalëkalimi</label>
-
-        <input
-          id="loginPassword"
-          type="password"
-          autocomplete="current-password"
-          placeholder="Minimumi 6 karaktere">
-
-      </div>
-
-      <div id="authMsg" class="full"></div>
-
-      <div class="full auth-actions">
-
-        <button class="primary" onclick="signIn()">
-          Hyr
-        </button>
-
-        <button class="light" onclick="signUp()">
-          Krijo llogari
-        </button>
-
-      </div>
+      <button onclick="register()">
+        Krijo llogari
+      </button>
 
     </div>
+
+    <div id="loginMessage" class="login-message"></div>
 
   </div>
 
 </div>
 
 
-<!-- =====================================================
+<!-- =========================
      APP
-===================================================== -->
+========================= -->
 
-<div id="appShell" style="display:none">
+<div id="appShell" class="hidden">
 
 <header>
 
-  <div class="head">
+  <div class="header-inner">
 
     <div>
-
-      <h1>📦 Porositë</h1>
-
-      <div class="subtitle">
-        Menaxhimi i porosive dhe furnitorëve
+      <div class="header-title">
+        📦 Porositë
       </div>
 
+      <div class="header-subtitle">
+        Menaxhimi i porosive dhe furnitorëve
+      </div>
     </div>
 
-    <div class="actions">
+    <div class="header-actions">
 
-      <span
-        id="userEmail"
-        style="font-size:13px;color:#cbd5e1">
-      </span>
-
-      <button
-        class="light"
-        onclick="loadAll()">
+      <button onclick="loadAll()">
         ↻ Rifresko
       </button>
 
-      <button
-        class="light"
-        onclick="signOut()">
+      <button onclick="logout()">
         Dil
       </button>
 
@@ -485,98 +638,73 @@ th{
 </header>
 
 
-<main>
+<main class="container">
 
-  <div id="message"></div>
+  <!-- =========================
+       STATS
+  ========================= -->
 
+  <div class="stats">
 
-  <!-- =================================================
-       STATISTIKAT
-  ================================================== -->
-
-  <div class="grid">
-
-    <div class="card">
-
-      <div class="muted">
+    <div class="stat">
+      <div class="stat-label">
         Porosi në pritje
       </div>
 
-      <div
-        class="stat"
-        id="waitingCount">
+      <div id="waitingCount" class="stat-value">
         0
       </div>
-
     </div>
 
-
-    <div class="card">
-
-      <div class="muted">
+    <div class="stat">
+      <div class="stat-label">
         Porosi të ardhura
       </div>
 
-      <div
-        class="stat"
-        id="arrivedCount">
+      <div id="arrivedCount" class="stat-value">
         0
       </div>
-
     </div>
 
-
-    <div class="card">
-
-      <div class="muted">
+    <div class="stat">
+      <div class="stat-label">
         Gjithsej porosi
       </div>
 
-      <div
-        class="stat"
-        id="totalCount">
+      <div id="totalCount" class="stat-value">
         0
       </div>
-
     </div>
 
-
-    <div class="card">
-
-      <div class="muted">
+    <div class="stat">
+      <div class="stat-label">
         Furnitorë
       </div>
 
-      <div
-        class="stat"
-        id="supplierCount">
+      <div id="supplierCount" class="stat-value">
         0
       </div>
-
     </div>
 
   </div>
 
 
-  <!-- =================================================
-       SHTO POROSI
-  ================================================== -->
+  <!-- =========================
+       ADD ORDER
+  ========================= -->
 
-  <section class="card">
+  <div class="card">
 
     <h2>
-      ➕ Shto porosi të re
+      ➕ Shto porosi
     </h2>
 
-    <div class="form">
+    <div class="form-grid">
 
-
-      <!-- FURNITORI -->
-
-      <div>
+      <div class="field">
 
         <label>
-          Furnitori
+          Furnitori *
         </label>
 
         <select id="supplier">
@@ -590,25 +718,22 @@ th{
       </div>
 
 
-      <!-- PRODUKTI - TANI SHKRUAHET ME DORE -->
-
-      <div>
+      <div class="field">
 
         <label>
-          Produkti
+          Produkti *
         </label>
 
         <input
-          id="productName"
+          id="product"
           type="text"
-          placeholder="Shkruaj emrin e produktit...">
+          placeholder="Shkruaj produktin..."
+        >
 
       </div>
 
 
-      <!-- SASIA -->
-
-      <div>
+      <div class="field">
 
         <label>
           Sasia
@@ -617,14 +742,13 @@ th{
         <input
           id="quantity"
           type="text"
-          placeholder="p.sh. 5">
+          placeholder="p.sh. 5"
+        >
 
       </div>
 
 
-      <!-- NJESIA -->
-
-      <div>
+      <div class="field">
 
         <label>
           Njësia
@@ -633,14 +757,13 @@ th{
         <input
           id="unit"
           type="text"
-          placeholder="cope, pako, metra...">
+          placeholder="cope, pako, metra..."
+        >
 
       </div>
 
 
-      <!-- SPECIFIKIMI -->
-
-      <div class="full">
+      <div class="field full">
 
         <label>
           Specifikimi
@@ -649,14 +772,13 @@ th{
         <input
           id="specification"
           type="text"
-          placeholder="p.sh. 50 cm, zi, 70 cm lartësi...">
+          placeholder="p.sh. 50 cm, zi, 70 cm lartësi..."
+        >
 
       </div>
 
 
-      <!-- SHENIM -->
-
-      <div class="full">
+      <div class="field full">
 
         <label>
           Shënim
@@ -664,127 +786,106 @@ th{
 
         <textarea
           id="note"
-          placeholder="Shënime shtesë për porosinë...">
-        </textarea>
-
-      </div>
-
-
-      <!-- BUTONAT -->
-
-      <div class="full actions">
-
-        <button
-          class="primary"
-          onclick="addOrder()">
-
-          + Ruaj porosinë
-
-        </button>
-
-
-        <button
-          class="light"
-          onclick="clearForm()">
-
-          Pastro
-
-        </button>
+          placeholder="Shënim shtesë..."
+        ></textarea>
 
       </div>
 
     </div>
 
-  </section>
 
-
-  <!-- =================================================
-       KERKIM
-  ================================================== -->
-
-  <section class="card">
-
-    <h2>
-      🔎 Kërko porosi
-    </h2>
-
-    <input
-      id="search"
-      class="search"
-      type="text"
-      placeholder="Kërko sipas furnitorit, produktit ose specifikimit..."
-      oninput="renderOrders()">
-
-
-    <div
-      class="actions"
-      style="margin-top:12px">
+    <div class="form-actions">
 
       <button
-        class="light"
-        onclick="setFilter('all')">
-
-        Të gjitha
-
+        class="btn btn-primary"
+        onclick="saveOrder()"
+      >
+        + Ruaj porosinë
       </button>
 
-
       <button
-        class="warning"
-        onclick="setFilter('waiting')">
-
-        Në pritje
-
-      </button>
-
-
-      <button
-        class="success"
-        onclick="setFilter('arrived')">
-
-        Të ardhura
-
+        class="btn btn-secondary"
+        onclick="clearOrderForm()"
+      >
+        Pastro
       </button>
 
     </div>
 
-  </section>
+  </div>
 
 
-  <!-- =================================================
-       FURNITORET
-  ================================================== -->
+  <!-- =========================
+       SUPPLIERS
+  ========================= -->
 
-  <section>
+  <div class="card">
 
     <h2>
       🏢 Furnitorët
     </h2>
 
     <div
-      id="suppliersList"
-      class="supplier-grid">
+      id="supplierList"
+      class="supplier-grid"
+    ></div>
 
-      <div class="card empty">
-        Duke ngarkuar...
-      </div>
-
-    </div>
-
-  </section>
+  </div>
 
 
-  <!-- =================================================
-       POROSITE
-  ================================================== -->
+  <!-- =========================
+       ORDERS
+  ========================= -->
 
-  <section class="card">
+  <div class="card">
 
     <h2>
       📋 Lista e porosive
     </h2>
 
-    <div style="overflow-x:auto">
+
+    <div class="filters">
+
+      <div class="search-box">
+
+        <input
+          id="search"
+          type="text"
+          placeholder="Kërko sipas furnitorit, produktit ose specifikimit..."
+          oninput="renderOrders()"
+        >
+
+      </div>
+
+
+      <button
+        id="filterAll"
+        class="filter-btn active"
+        onclick="setFilter('all')"
+      >
+        Të gjitha
+      </button>
+
+      <button
+        id="filterWaiting"
+        class="filter-btn"
+        onclick="setFilter('waiting')"
+      >
+        Në pritje
+      </button>
+
+      <button
+        id="filterArrived"
+        class="filter-btn"
+        onclick="setFilter('arrived')"
+      >
+        Të ardhura
+      </button>
+
+    </div>
+
+
+    <div class="table-wrap">
 
       <table>
 
@@ -824,55 +925,44 @@ th{
 
         </thead>
 
-        <tbody id="ordersTable">
-
-          <tr>
-
-            <td
-              colspan="7"
-              class="empty">
-
-              Duke ngarkuar...
-
-            </td>
-
-          </tr>
-
-        </tbody>
+        <tbody id="ordersTable"></tbody>
 
       </table>
 
     </div>
 
-  </section>
+  </div>
 
 </main>
 
 </div>
 
 
+<div id="message" class="message"></div>
+
+
 <script>
 
-/* =========================================================
+/* =========================================
    SUPABASE
-========================================================= */
+========================================= */
 
 const SUPABASE_URL =
   "https://sfddbealvlrlvqawfcem.supabase.co";
 
-const SUPABASE_PUBLISHABLE_KEY =
+const SUPABASE_KEY =
   "sb_publishable_uSRoEKBFo1Q9zJptUpO9Ww_oiYZE9Cr";
 
 const supabaseClient =
   supabase.createClient(
     SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
+    SUPABASE_KEY
   );
 
 
-/* =========================================================
+/* =========================================
    STATE
-========================================================= */
+========================================= */
 
 let currentUser = null;
 
@@ -883,351 +973,321 @@ let orders = [];
 let currentFilter = "all";
 
 
-/* =========================================================
-   MESAZHET
-========================================================= */
+/* =========================================
+   ELEMENTS
+========================================= */
 
-function showMessage(text, type = "ok") {
+const loginScreen =
+  document.getElementById("loginScreen");
+
+const appShell =
+  document.getElementById("appShell");
+
+const loginMessage =
+  document.getElementById("loginMessage");
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+function showMessage(text, type = ""){
 
   const box =
     document.getElementById("message");
 
-  box.innerHTML = `
-    <div class="status ${type}">
-      ${escapeHtml(text)}
-    </div>
-  `;
+  box.textContent = text;
+
+  box.className = "message " + type;
+
+  box.style.display = "block";
 
   setTimeout(() => {
 
-    box.innerHTML = "";
+    box.style.display = "none";
 
-  }, 4000);
+  }, 3000);
+}
+
+
+/* =========================================
+   LOGIN MESSAGE
+========================================= */
+
+function showLoginMessage(text){
+
+  loginMessage.textContent = text;
+
+  loginMessage.style.display = "block";
+}
+
+
+/* =========================================
+   SHOW / HIDE
+========================================= */
+
+function showLogin(){
+
+  loginScreen.classList.remove("hidden");
+
+  appShell.classList.add("hidden");
 
 }
 
 
-/* =========================================================
-   HTML ESCAPE
-========================================================= */
+function showApp(){
 
-function escapeHtml(value) {
+  loginScreen.classList.add("hidden");
 
-  if (
-    value === null ||
-    value === undefined
-  ) {
-
-    return "";
-
-  }
-
-  return String(value)
-
-    .replaceAll("&", "&amp;")
-
-    .replaceAll("<", "&lt;")
-
-    .replaceAll(">", "&gt;")
-
-    .replaceAll('"', "&quot;")
-
-    .replaceAll("'", "&#039;");
-}
-
-
-/* =========================================================
-   AUTH MESSAGE
-========================================================= */
-
-function setAuthMessage(
-  text,
-  type = "ok"
-) {
-
-  const box =
-    document.getElementById("authMsg");
-
-  box.innerHTML =
-    text
-      ? `
-        <div class="status ${type}">
-          ${escapeHtml(text)}
-        </div>
-      `
-      : "";
+  appShell.classList.remove("hidden");
 
 }
 
 
-/* =========================================================
-   SIGN IN
-========================================================= */
+/* =========================================
+   REGISTER
+========================================= */
 
-async function signIn() {
+async function register(){
 
   const email =
-    document
-      .getElementById("loginEmail")
-      .value
-      .trim();
+    document.getElementById("email").value.trim();
 
   const password =
-    document
-      .getElementById("loginPassword")
-      .value;
+    document.getElementById("password").value;
 
+  if(!email || !password){
 
-  if (!email || !password) {
-
-    setAuthMessage(
-      "Shkruaj emailin dhe fjalëkalimin.",
-      "error"
+    showLoginMessage(
+      "Shkruaj emailin dhe fjalëkalimin."
     );
 
     return;
-
   }
 
+  if(password.length < 6){
 
-  setAuthMessage(
-    "Duke hyrë..."
-  );
+    showLoginMessage(
+      "Fjalëkalimi duhet të ketë së paku 6 karaktere."
+    );
 
+    return;
+  }
 
   const { data, error } =
-    await supabaseClient.auth
-      .signInWithPassword({
-        email,
-        password
-      });
+    await supabaseClient.auth.signUp({
+      email,
+      password
+    });
 
+  if(error){
 
-  if (error) {
-
-    console.error(error);
-
-    setAuthMessage(
-      "Hyrja dështoi: " +
-      error.message,
-      "error"
-    );
+    showLoginMessage(error.message);
 
     return;
-
   }
 
+  if(data.session){
 
-  await handleSession(
-    data.session
-  );
+    currentUser = data.user;
 
-}
-
-
-/* =========================================================
-   SIGN UP
-========================================================= */
-
-async function signUp() {
-
-  const email =
-    document
-      .getElementById("loginEmail")
-      .value
-      .trim();
-
-  const password =
-    document
-      .getElementById("loginPassword")
-      .value;
-
-
-  if (!email || !password) {
-
-    setAuthMessage(
-      "Shkruaj emailin dhe fjalëkalimin.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  if (password.length < 6) {
-
-    setAuthMessage(
-      "Fjalëkalimi duhet të ketë së paku 6 karaktere.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  setAuthMessage(
-    "Duke krijuar llogarinë..."
-  );
-
-
-  const { data, error } =
-    await supabaseClient.auth
-      .signUp({
-        email,
-        password
-      });
-
-
-  if (error) {
-
-    console.error(error);
-
-    setAuthMessage(
-      "Llogaria nuk u krijua: " +
-      error.message,
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  if (data.session) {
-
-    setAuthMessage(
-      "Llogaria u krijua."
-    );
-
-    await handleSession(
-      data.session
-    );
-
-  } else {
-
-    setAuthMessage(
-      "Llogaria u krijua. Kontrollo emailin për konfirmim dhe pastaj hyr."
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   SIGN OUT
-========================================================= */
-
-async function signOut() {
-
-  await supabaseClient.auth.signOut();
-
-}
-
-
-/* =========================================================
-   HANDLE SESSION
-========================================================= */
-
-async function handleSession(session) {
-
-  currentUser =
-    session?.user || null;
-
-
-  const loginScreen =
-    document.getElementById(
-      "loginScreen"
-    );
-
-  const appShell =
-    document.getElementById(
-      "appShell"
-    );
-
-  const userEmail =
-    document.getElementById(
-      "userEmail"
-    );
-
-
-  if (currentUser) {
-
-    loginScreen.style.display =
-      "none";
-
-    appShell.style.display =
-      "block";
-
-    userEmail.textContent =
-      currentUser.email || "";
-
+    showApp();
 
     await loadAll();
 
-  } else {
+    showMessage(
+      "Llogaria u krijua me sukses.",
+      "success"
+    );
 
-    appShell.style.display =
-      "none";
+  }else{
 
-    loginScreen.style.display =
-      "flex";
-
-    document.getElementById(
-      "loginPassword"
-    ).value = "";
+    showLoginMessage(
+      "Llogaria u krijua. Kontrollo emailin për konfirmim nëse kërkohet."
+    );
 
   }
 
 }
 
 
-/* =========================================================
-   AUTH STATE
-========================================================= */
+/* =========================================
+   LOGIN
+========================================= */
 
-supabaseClient.auth
-  .onAuthStateChange(
-    (event, session) => {
+async function login(){
 
-      setTimeout(
-        () => handleSession(session),
-        0
-      );
+  const email =
+    document.getElementById("email").value.trim();
 
-    }
-  );
+  const password =
+    document.getElementById("password").value;
 
+  if(!email || !password){
 
-/* =========================================================
-   LOAD SUPPLIERS
-========================================================= */
+    showLoginMessage(
+      "Shkruaj emailin dhe fjalëkalimin."
+    );
 
-async function loadSuppliers() {
+    return;
+  }
 
   const { data, error } =
-    await supabaseClient
-      .from("suppliers")
-      .select("*")
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .order("name");
+    await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+  if(error){
+
+    showLoginMessage(error.message);
+
+    return;
+  }
+
+  currentUser = data.user;
+
+  showApp();
+
+  await loadAll();
+
+  showMessage(
+    "U kyçe me sukses.",
+    "success"
+  );
+
+}
 
 
-  if (error) {
+/* =========================================
+   LOGOUT
+========================================= */
 
-    throw error;
+async function logout(){
+
+  await supabaseClient.auth.signOut();
+
+  currentUser = null;
+
+  orders = [];
+
+  suppliers = [];
+
+  showLogin();
+
+}
+
+
+/* =========================================
+   SESSION
+========================================= */
+
+async function checkSession(){
+
+  const {
+    data: { session }
+  } =
+    await supabaseClient.auth.getSession();
+
+  if(session){
+
+    currentUser = session.user;
+
+    showApp();
+
+    await loadAll();
+
+  }else{
+
+    showLogin();
 
   }
 
+}
 
-  suppliers =
-    data || [];
 
+/* =========================================
+   AUTH STATE
+========================================= */
+
+supabaseClient.auth.onAuthStateChange(
+  async (event, session) => {
+
+    if(session){
+
+      currentUser = session.user;
+
+      showApp();
+
+      await loadAll();
+
+    }else{
+
+      currentUser = null;
+
+      showLogin();
+
+    }
+
+  }
+);
+
+
+/* =========================================
+   LOAD ALL
+========================================= */
+
+async function loadAll(){
+
+  if(!currentUser){
+
+    return;
+  }
+
+  await loadSuppliers();
+
+  await loadOrders();
+
+  renderAll();
+
+}
+
+
+/* =========================================
+   LOAD SUPPLIERS
+========================================= */
+
+async function loadSuppliers(){
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+    .from("suppliers")
+    .select("id,name,user_id")
+    .eq("user_id", currentUser.id)
+    .order("name", {
+      ascending:true
+    });
+
+  if(error){
+
+    console.error(error);
+
+    showMessage(
+      "Gabim gjatë leximit të furnitorëve.",
+      "error"
+    );
+
+    return;
+  }
+
+  suppliers = data || [];
+
+  document.getElementById(
+    "supplierCount"
+  ).textContent = suppliers.length;
 
   renderSupplierSelect();
 
@@ -1236,653 +1296,126 @@ async function loadSuppliers() {
 }
 
 
-/* =========================================================
-   LOAD ORDERS
-========================================================= */
+/* =========================================
+   SUPPLIER SELECT
+========================================= */
 
-async function loadOrders() {
+function renderSupplierSelect(){
 
-  const { data, error } =
-    await supabaseClient
-      .from("orders")
-      .select(`
-        id,
-        supplier_id,
-        product_name,
-        quantity,
-        unit,
-        specification,
-        note,
-        order_date,
-        status,
-        arrived_date,
-        created_at,
-        suppliers(name)
-      `)
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      );
+  const select =
+    document.getElementById("supplier");
 
+  select.innerHTML =
+    `<option value="">
+      Zgjidh furnitorin...
+    </option>`;
 
-  if (error) {
+  suppliers.forEach(supplier => {
 
-    throw error;
+    const option =
+      document.createElement("option");
 
-  }
+    option.value = supplier.id;
 
+    option.textContent = supplier.name;
 
-  orders =
-    data || [];
+    select.appendChild(option);
 
-
-  renderOrders();
-
-  renderStats();
+  });
 
 }
 
 
-/* =========================================================
-   LOAD ALL
-========================================================= */
+/* =========================================
+   LOAD ORDERS
+========================================= */
 
-async function loadAll() {
+async function loadOrders(){
 
-  try {
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+    .from("orders")
+    .select(`
+      id,
+      supplier_id,
+      product_id,
+      product_name,
+      quantity,
+      unit,
+      specification,
+      note,
+      order_date,
+      status,
+      arrived_date,
+      created_at,
+      user_id,
+      suppliers(name)
+    `)
+    .eq("user_id", currentUser.id)
+    .order("created_at", {
+      ascending:false
+    });
 
-    showMessage(
-      "Duke ngarkuar të dhënat..."
-    );
-
-
-    await loadSuppliers();
-
-    await loadOrders();
-
-
-    showMessage(
-      "Të dhënat u ngarkuan me sukses."
-    );
-
-
-  } catch (error) {
+  if(error){
 
     console.error(error);
 
-
     showMessage(
-      "Gabim gjatë lidhjes me databazën: " +
-      error.message,
+      "Gabim gjatë leximit të porosive.",
       "error"
     );
 
-  }
-
-}
-
-
-/* =========================================================
-   SUPPLIER SELECT
-========================================================= */
-
-function renderSupplierSelect() {
-
-  const select =
-    document.getElementById(
-      "supplier"
-    );
-
-
-  select.innerHTML =
-    `
-      <option value="">
-        Zgjidh furnitorin...
-      </option>
-    `;
-
-
-  suppliers.forEach(
-    supplier => {
-
-      select.innerHTML += `
-        <option value="${supplier.id}">
-          ${escapeHtml(
-            supplier.name
-          )}
-        </option>
-      `;
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   FURNITORET
-========================================================= */
-
-function renderSuppliers() {
-
-  const container =
-    document.getElementById(
-      "suppliersList"
-    );
-
-
-  if (!suppliers.length) {
-
-    container.innerHTML =
-      `
-        <div class="card empty">
-          Nuk ka furnitorë.
-        </div>
-      `;
-
     return;
-
   }
 
+  orders = data || [];
 
-  container.innerHTML = "";
-
-
-  suppliers.forEach(
-    supplier => {
-
-      const supplierOrders =
-        orders.filter(
-          order =>
-            String(
-              order.supplier_id
-            ) ===
-            String(
-              supplier.id
-            )
-        );
-
-
-      const waiting =
-        supplierOrders.filter(
-          order =>
-            order.status ===
-            "waiting"
-        ).length;
-
-
-      const arrived =
-        supplierOrders.filter(
-          order =>
-            order.status ===
-            "arrived"
-        ).length;
-
-
-      container.innerHTML += `
-
-        <div class="supplier">
-
-          <div class="supplier-name">
-
-            <span>
-              🏢
-              ${escapeHtml(
-                supplier.name
-              )}
-            </span>
-
-            <span class="badge waiting">
-              ${waiting} në pritje
-            </span>
-
-          </div>
-
-          <div class="small">
-
-            ${supplierOrders.length}
-            porosi gjithsej
-
-            ·
-
-            ${arrived}
-            të ardhura
-
-          </div>
-
-        </div>
-
-      `;
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   STATISTIKAT
-========================================================= */
-
-function renderStats() {
-
-  const waiting =
-    orders.filter(
-      order =>
-        order.status ===
-        "waiting"
-    ).length;
-
-
-  const arrived =
-    orders.filter(
-      order =>
-        order.status ===
-        "arrived"
-    ).length;
-
-
-  document.getElementById(
-    "waitingCount"
-  ).textContent =
-    waiting;
-
-
-  document.getElementById(
-    "arrivedCount"
-  ).textContent =
-    arrived;
-
-
-  document.getElementById(
-    "totalCount"
-  ).textContent =
-    orders.length;
-
-
-  document.getElementById(
-    "supplierCount"
-  ).textContent =
-    suppliers.length;
-
-}
-
-
-/* =========================================================
-   FILTER
-========================================================= */
-
-function setFilter(filter) {
-
-  currentFilter =
-    filter;
+  renderStats();
 
   renderOrders();
 
 }
 
 
-/* =========================================================
-   RENDER ORDERS
-========================================================= */
+/* =========================================
+   SAVE ORDER
+========================================= */
 
-function renderOrders() {
+async function saveOrder(){
 
-  const tbody =
-    document.getElementById(
-      "ordersTable"
+  if(!currentUser){
+
+    showMessage(
+      "Duhet të jesh i kyçur.",
+      "error"
     );
 
-
-  const search =
-    document.getElementById(
-      "search"
-    )
-    .value
-    .trim()
-    .toLowerCase();
-
-
-  let filtered =
-    [...orders];
-
-
-  /* FILTER STATUS */
-
-  if (
-    currentFilter !==
-    "all"
-  ) {
-
-    filtered =
-      filtered.filter(
-        order =>
-          order.status ===
-          currentFilter
-      );
-
-  }
-
-
-  /* SEARCH */
-
-  if (search) {
-
-    filtered =
-      filtered.filter(
-        order => {
-
-          const supplier =
-            order.suppliers?.name ||
-            "";
-
-
-          const text = [
-
-            supplier,
-
-            order.product_name,
-
-            order.specification,
-
-            order.note,
-
-            order.quantity,
-
-            order.unit
-
-          ]
-          .join(" ")
-          .toLowerCase();
-
-
-          return text.includes(
-            search
-          );
-
-        }
-      );
-
-  }
-
-
-  /* EMPTY */
-
-  if (!filtered.length) {
-
-    tbody.innerHTML = `
-      <tr>
-
-        <td
-          colspan="7"
-          class="empty">
-
-          Nuk u gjet asnjë porosi.
-
-        </td>
-
-      </tr>
-    `;
-
     return;
-
   }
-
-
-  tbody.innerHTML = "";
-
-
-  /* RENDER */
-
-  filtered.forEach(
-    order => {
-
-      const supplier =
-        order.suppliers?.name ||
-        "—";
-
-
-      const date =
-        order.order_date
-          ? new Date(
-              order.order_date
-            )
-            .toLocaleDateString(
-              "sq-AL"
-            )
-          : "—";
-
-
-      let statusHtml;
-
-
-      if (
-        order.status ===
-        "waiting"
-      ) {
-
-        statusHtml = `
-          <span class="badge waiting">
-            ⏳ Në pritje
-          </span>
-        `;
-
-      } else {
-
-        statusHtml = `
-          <span class="badge arrived">
-            ✅ E ardhur
-          </span>
-        `;
-
-      }
-
-
-      let actionHtml = "";
-
-
-      if (
-        order.status ===
-        "waiting"
-      ) {
-
-        actionHtml = `
-          <button
-            class="success"
-            onclick="markArrived('${order.id}')">
-
-            Erdhi
-
-          </button>
-        `;
-
-      } else {
-
-        actionHtml = `
-          <button
-            class="light"
-            onclick="markWaiting('${order.id}')">
-
-            Kthe në pritje
-
-          </button>
-        `;
-
-      }
-
-
-      actionHtml += `
-        <button
-          class="danger"
-          style="margin-left:5px"
-          onclick="deleteOrder('${order.id}')">
-
-          Fshi
-
-        </button>
-      `;
-
-
-      tbody.innerHTML += `
-
-        <tr>
-
-          <td>
-
-            <div class="order-title">
-
-              ${escapeHtml(
-                supplier
-              )}
-
-            </div>
-
-          </td>
-
-
-          <td>
-
-            <div class="order-title">
-
-              ${escapeHtml(
-                order.product_name
-              )}
-
-            </div>
-
-
-            ${
-              order.note
-                ? `
-                  <div class="small">
-                    ${escapeHtml(
-                      order.note
-                    )}
-                  </div>
-                `
-                : ""
-            }
-
-          </td>
-
-
-          <td>
-
-            ${escapeHtml(
-              order.quantity ||
-              "—"
-            )}
-
-            ${escapeHtml(
-              order.unit ||
-              ""
-            )}
-
-          </td>
-
-
-          <td>
-
-            ${escapeHtml(
-              order.specification ||
-              "—"
-            )}
-
-          </td>
-
-
-          <td>
-
-            ${date}
-
-          </td>
-
-
-          <td>
-
-            ${statusHtml}
-
-          </td>
-
-
-          <td>
-
-            <div class="actions">
-
-              ${actionHtml}
-
-            </div>
-
-          </td>
-
-        </tr>
-
-      `;
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   ADD ORDER
-========================================================= */
-
-async function addOrder() {
 
   const supplierId =
-    document.getElementById(
-      "supplier"
-    ).value;
+    document.getElementById("supplier").value;
 
-
-  /* PRODUKTI SHKRUHET ME DORE */
-
-  const productName =
-    document.getElementById(
-      "productName"
-    ).value
-    .trim();
-
+  const product =
+    document.getElementById("product").value.trim();
 
   const quantity =
-    document.getElementById(
-      "quantity"
-    ).value
-    .trim();
-
+    document.getElementById("quantity").value.trim();
 
   const unit =
-    document.getElementById(
-      "unit"
-    ).value
-    .trim();
-
+    document.getElementById("unit").value.trim();
 
   const specification =
-    document.getElementById(
-      "specification"
-    ).value
-    .trim();
-
+    document.getElementById("specification").value.trim();
 
   const note =
-    document.getElementById(
-      "note"
-    ).value
-    .trim();
+    document.getElementById("note").value.trim();
 
 
-  /* VALIDIMI FURNITORIT */
-
-  if (!supplierId) {
+  if(!supplierId){
 
     showMessage(
       "Zgjidh furnitorin.",
@@ -1890,329 +1423,686 @@ async function addOrder() {
     );
 
     return;
-
   }
 
 
-  /* VALIDIMI PRODUKTIT */
-
-  if (!productName) {
+  if(!product){
 
     showMessage(
-      "Shkruaj emrin e produktit.",
+      "Shkruaj produktin.",
       "error"
     );
 
     return;
-
   }
 
 
-  /* DATA */
+  const orderData = {
 
-  const today =
-    new Date()
-      .toISOString()
-      .slice(0,10);
+    supplier_id: supplierId,
 
+    product_id: null,
 
-  /* INSERT */
+    product_name: product,
 
-  const { error } =
-    await supabaseClient
-      .from("orders")
-      .insert({
+    quantity: quantity || null,
 
-        user_id:
-          currentUser.id,
+    unit: unit || null,
 
-        supplier_id:
-          supplierId,
+    specification:
+      specification || null,
 
-        product_name:
-          productName,
+    note:
+      note || null,
 
-        quantity:
-          quantity || null,
+    order_date:
+      new Date().toISOString().slice(0,10),
 
-        unit:
-          unit || null,
+    status:"waiting",
 
-        specification:
-          specification ||
-          null,
+    user_id:
+      currentUser.id
 
-        note:
-          note ||
-          null,
-
-        order_date:
-          today,
-
-        status:
-          "waiting"
-
-      });
+  };
 
 
-  /* ERROR */
+  const {
+    error
+  } =
+  await supabaseClient
+    .from("orders")
+    .insert(orderData);
 
-  if (error) {
+
+  if(error){
 
     console.error(error);
 
-
     showMessage(
-      "Porosia nuk u ruajt: " +
-      error.message,
+      "Gabim gjatë ruajtjes: " + error.message,
       "error"
     );
 
     return;
-
   }
 
 
-  /* PASTRO */
-
-  clearForm();
-
-
-  /* RIFRESKO */
+  clearOrderForm();
 
   await loadOrders();
 
-  renderSuppliers();
-
+  renderStats();
 
   showMessage(
-    "✅ Porosia u ruajt me sukses."
+    "Porosia u ruajt me sukses.",
+    "success"
   );
 
 }
 
 
-/* =========================================================
-   MARK ARRIVED
-========================================================= */
+/* =========================================
+   CLEAR FORM
+========================================= */
 
-async function markArrived(id) {
+function clearOrderForm(){
 
-  const { error } =
-    await supabaseClient
-      .from("orders")
-      .update({
+  document.getElementById("supplier").value = "";
 
-        status:
-          "arrived",
+  document.getElementById("product").value = "";
 
-        arrived_date:
-          new Date()
-            .toISOString()
+  document.getElementById("quantity").value = "";
 
-      })
-      .eq(
-        "id",
-        id
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      );
+  document.getElementById("unit").value = "";
+
+  document.getElementById("specification").value = "";
+
+  document.getElementById("note").value = "";
+
+}
 
 
-  if (error) {
+/* =========================================
+   CHANGE STATUS
+========================================= */
+
+async function toggleStatus(id, status){
+
+  const newStatus =
+    status === "waiting"
+      ? "arrived"
+      : "waiting";
+
+
+  const updateData = {
+
+    status:newStatus
+
+  };
+
+
+  if(newStatus === "arrived"){
+
+    updateData.arrived_date =
+      new Date().toISOString();
+
+  }else{
+
+    updateData.arrived_date = null;
+
+  }
+
+
+  const {
+    error
+  } =
+  await supabaseClient
+    .from("orders")
+    .update(updateData)
+    .eq("id", id)
+    .eq("user_id", currentUser.id);
+
+
+  if(error){
+
+    console.error(error);
 
     showMessage(
-      "Gabim: " +
-      error.message,
+      "Gabim gjatë ndryshimit të statusit.",
       "error"
     );
 
     return;
-
   }
 
 
   await loadOrders();
 
-  renderSuppliers();
-
+  renderStats();
 
   showMessage(
-    "✅ Porosia u shënua si e ardhur."
+    newStatus === "arrived"
+      ? "Porosia u shënua si e ardhur."
+      : "Porosia u kthye në pritje.",
+    "success"
   );
 
 }
 
 
-/* =========================================================
-   MARK WAITING
-========================================================= */
-
-async function markWaiting(id) {
-
-  const { error } =
-    await supabaseClient
-      .from("orders")
-      .update({
-
-        status:
-          "waiting",
-
-        arrived_date:
-          null
-
-      })
-      .eq(
-        "id",
-        id
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      );
-
-
-  if (error) {
-
-    showMessage(
-      "Gabim: " +
-      error.message,
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  await loadOrders();
-
-  renderSuppliers();
-
-
-  showMessage(
-    "Porosia u kthye në pritje."
-  );
-
-}
-
-
-/* =========================================================
+/* =========================================
    DELETE ORDER
-========================================================= */
+========================================= */
 
-async function deleteOrder(id) {
+async function deleteOrder(id){
 
   const confirmed =
     confirm(
       "A je i sigurt që dëshiron ta fshish këtë porosi?"
     );
 
-
-  if (!confirmed) {
+  if(!confirmed){
 
     return;
-
   }
 
 
-  const { error } =
-    await supabaseClient
-      .from("orders")
-      .delete()
-      .eq(
-        "id",
-        id
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      );
+  const {
+    error
+  } =
+  await supabaseClient
+    .from("orders")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", currentUser.id);
 
 
-  if (error) {
+  if(error){
+
+    console.error(error);
 
     showMessage(
-      "Porosia nuk u fshi: " +
-      error.message,
+      "Gabim gjatë fshirjes.",
       "error"
     );
 
     return;
-
   }
 
 
   await loadOrders();
 
-  renderSuppliers();
-
+  renderStats();
 
   showMessage(
-    "Porosia u fshi."
+    "Porosia u fshi.",
+    "success"
   );
 
 }
 
 
-/* =========================================================
-   CLEAR FORM
-========================================================= */
+/* =========================================
+   FILTER
+========================================= */
 
-function clearForm() {
+function setFilter(filter){
 
-  document.getElementById(
-    "supplier"
-  ).value = "";
+  currentFilter = filter;
 
+  document
+    .getElementById("filterAll")
+    .classList.remove("active");
 
-  document.getElementById(
-    "productName"
-  ).value = "";
+  document
+    .getElementById("filterWaiting")
+    .classList.remove("active");
 
-
-  document.getElementById(
-    "quantity"
-  ).value = "";
-
-
-  document.getElementById(
-    "unit"
-  ).value = "";
+  document
+    .getElementById("filterArrived")
+    .classList.remove("active");
 
 
-  document.getElementById(
-    "specification"
-  ).value = "";
+  if(filter === "all"){
+
+    document
+      .getElementById("filterAll")
+      .classList.add("active");
+
+  }
+
+  if(filter === "waiting"){
+
+    document
+      .getElementById("filterWaiting")
+      .classList.add("active");
+
+  }
+
+  if(filter === "arrived"){
+
+    document
+      .getElementById("filterArrived")
+      .classList.add("active");
+
+  }
 
 
-  document.getElementById(
-    "note"
-  ).value = "";
+  renderOrders();
 
 }
 
 
-/* =========================================================
-   START
-========================================================= */
+/* =========================================
+   RENDER STATS
+========================================= */
 
-supabaseClient.auth
-  .getSession()
-  .then(
-    ({ data }) => {
+function renderStats(){
 
-      handleSession(
-        data.session
+  const waiting =
+    orders.filter(
+      order => order.status === "waiting"
+    ).length;
+
+
+  const arrived =
+    orders.filter(
+      order => order.status === "arrived"
+    ).length;
+
+
+  document.getElementById(
+    "waitingCount"
+  ).textContent = waiting;
+
+
+  document.getElementById(
+    "arrivedCount"
+  ).textContent = arrived;
+
+
+  document.getElementById(
+    "totalCount"
+  ).textContent = orders.length;
+
+
+  document.getElementById(
+    "supplierCount"
+  ).textContent = suppliers.length;
+
+}
+
+
+/* =========================================
+   RENDER SUPPLIERS
+========================================= */
+
+function renderSuppliers(){
+
+  const box =
+    document.getElementById("supplierList");
+
+  if(!suppliers.length){
+
+    box.innerHTML =
+      `<div class="empty">
+        Nuk ka furnitorë.
+      </div>`;
+
+    return;
+  }
+
+
+  box.innerHTML = "";
+
+
+  suppliers.forEach(supplier => {
+
+    const supplierOrders =
+      orders.filter(
+        order =>
+          String(order.supplier_id) ===
+          String(supplier.id)
       );
 
+
+    const waiting =
+      supplierOrders.filter(
+        order =>
+          order.status === "waiting"
+      ).length;
+
+
+    const arrived =
+      supplierOrders.filter(
+        order =>
+          order.status === "arrived"
+      ).length;
+
+
+    const card =
+      document.createElement("div");
+
+    card.className = "supplier-card";
+
+
+    card.innerHTML = `
+
+      <div class="supplier-name">
+        ${escapeHtml(supplier.name)}
+      </div>
+
+      <div class="supplier-info">
+
+        ${waiting} në pritje<br>
+
+        ${arrived} të ardhura<br>
+
+        Gjithsej:
+        ${supplierOrders.length} porosi
+
+      </div>
+
+    `;
+
+
+    box.appendChild(card);
+
+  });
+
+}
+
+
+/* =========================================
+   RENDER ORDERS
+========================================= */
+
+function renderOrders(){
+
+  const tbody =
+    document.getElementById("ordersTable");
+
+
+  const search =
+    document
+      .getElementById("search")
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  let filtered =
+    [...orders];
+
+
+  if(currentFilter !== "all"){
+
+    filtered =
+      filtered.filter(
+        order =>
+          order.status === currentFilter
+      );
+
+  }
+
+
+  if(search){
+
+    filtered =
+      filtered.filter(order => {
+
+        const supplierName =
+          order.suppliers?.name || "";
+
+        const product =
+          order.product_name || "";
+
+        const specification =
+          order.specification || "";
+
+        const note =
+          order.note || "";
+
+
+        const text = (
+
+          supplierName +
+          " " +
+          product +
+          " " +
+          specification +
+          " " +
+          note
+
+        ).toLowerCase();
+
+
+        return text.includes(search);
+
+      });
+
+  }
+
+
+  if(!filtered.length){
+
+    tbody.innerHTML = `
+
+      <tr>
+
+        <td colspan="7">
+
+          <div class="empty">
+            Nuk ka porosi.
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+  }
+
+
+  tbody.innerHTML = "";
+
+
+  filtered.forEach(order => {
+
+    const tr =
+      document.createElement("tr");
+
+
+    const supplierName =
+      order.suppliers?.name ||
+      "Pa furnitor";
+
+
+    const date =
+      order.order_date
+        ? formatDate(order.order_date)
+        : "-";
+
+
+    const statusHtml =
+      order.status === "waiting"
+
+        ? `<span class="status waiting">
+             Në pritje
+           </span>`
+
+        : `<span class="status arrived">
+             Të ardhura
+           </span>`;
+
+
+    const actionText =
+      order.status === "waiting"
+        ? "✓ Erdhi"
+        : "↩ Pritje";
+
+
+    const actionClass =
+      order.status === "waiting"
+        ? "btn-green"
+        : "btn-secondary";
+
+
+    tr.innerHTML = `
+
+      <td>
+        <strong>
+          ${escapeHtml(supplierName)}
+        </strong>
+      </td>
+
+      <td>
+
+        <strong>
+          ${escapeHtml(order.product_name || "-")}
+        </strong>
+
+        ${
+          order.note
+            ? `<div style="
+                 color:#667085;
+                 font-size:12px;
+                 margin-top:4px;
+               ">
+                 ${escapeHtml(order.note)}
+               </div>`
+            : ""
+        }
+
+      </td>
+
+      <td>
+
+        ${escapeHtml(
+          order.quantity || "-"
+        )}
+
+        ${
+          order.unit
+            ? " " + escapeHtml(order.unit)
+            : ""
+        }
+
+      </td>
+
+      <td>
+        ${escapeHtml(
+          order.specification || "-"
+        )}
+      </td>
+
+      <td>
+        ${date}
+      </td>
+
+      <td>
+        ${statusHtml}
+      </td>
+
+      <td>
+
+        <div class="actions">
+
+          <button
+            class="${actionClass}"
+            onclick="toggleStatus(
+              ${order.id},
+              '${order.status}'
+            )"
+          >
+            ${actionText}
+          </button>
+
+          <button
+            class="btn-red"
+            onclick="deleteOrder(${order.id})"
+          >
+            Fshi
+          </button>
+
+        </div>
+
+      </td>
+
+    `;
+
+
+    tbody.appendChild(tr);
+
+  });
+
+}
+
+
+/* =========================================
+   RENDER ALL
+========================================= */
+
+function renderAll(){
+
+  renderStats();
+
+  renderSuppliers();
+
+  renderOrders();
+
+}
+
+
+/* =========================================
+   DATE
+========================================= */
+
+function formatDate(dateString){
+
+  const date =
+    new Date(
+      dateString + "T00:00:00"
+    );
+
+
+  return date.toLocaleDateString(
+    "sq-AL",
+    {
+      day:"2-digit",
+      month:"2-digit",
+      year:"numeric"
     }
   );
+
+}
+
+
+/* =========================================
+   HTML ESCAPE
+========================================= */
+
+function escapeHtml(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+checkSession();
 
 </script>
 
 </body>
 </html>
-```
